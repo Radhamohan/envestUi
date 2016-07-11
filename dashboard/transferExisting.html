@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-danger">Transfer Money</button>
+    </div>        
+    <div class="col-md-2"></div>
+</div>
+</br>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        
+        <table class="table table-hover table-bordered text-center">
+            <tr class="danger">
+                <th colspan="4">
+                    <h3>Total Available Funds: {{ getTotalAvailableFunds(true) }}</h3>                    
+                    <h4>New Total Remaining Balance: {{ getRemainingBalance(true) }}</h4>
+                </th>
+            </tr>
+            <tr class="info">
+                <th>Account# </th>
+                <th>Balance</th>
+                <th>New Balance</th>
+                <th>Amount To Transfer</th>
+            </tr>
+            <tr class="warning" ng-repeat="account in accounts">
+                <td>{{ account.institution_type }} - {{ account.meta.name }} - {{ account.meta.number }}</td>
+                <td>{{ formatNumber(account.balance.available) }}</td>
+                <td>{{ formatNumber(account.balance.available - account.transferAmount) }}</td>
+                <td><input type="" name="" ng-model="account.transferAmount" value=""></td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="col-md-5">        
+        <table class="table table-hover table-bordered text-center">
+            <tr class="success">
+                <th colspan="4">
+                    <h3 class="text-success">Total Amount to Allocate: {{ getAmountAvailabeForTransfer(true) }}</h3>                    
+                    <h4 class="text-success">Remaining Amount to Allocate: {{ getRemainingAmountToAllocate(true) }}</h4>            
+                </th>
+            </tr>
+            <tr class="info">
+                <th>Account# </th>
+                <th>Balance</th>
+                <th>New Balance</th>
+                <th>Amount To Transfer</th>
+            </tr>
+            <tr class="warning" ng-repeat="account in existingEnvestAccounts">
+                <td>{{ account.bankName }} - {{ account.accountNo }}</td>
+                <td>{{ formatNumber(account.balance) }}</td>
+                <td>{{ getSum(account.balance, account.allocatedAmount) }}</td>
+                <td><input type="number" name="" ng-model="account.allocatedAmount" value=""></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>

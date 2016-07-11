@@ -1,0 +1,28 @@
+<div class="col-md-4"></div>
+<div class="col-md-4">
+    <form>
+        <div class="form-group">
+            <select class="form-control" ng-model="linkAccount.selectedBank">
+                            <option value="">Select the bank</option>4
+                            <option value="chase">Chase</option>
+                            <option value="amex">American Express</option>
+                            <option value="schwab">Charles Schwab</option>
+                            <option value="wells">Wells Fargo</option>
+                            <option value="fidelity">Fidelity</option>
+                            <option value="nfcu">Navy Federal Credit Union</option>
+                            <option value="suntrust">SunTrust</option>
+                            <option value="citi">Citi</option>
+             </select>
+        </div>
+        <div>
+            <input type="text" name="" value="" class="form-control" placeholder="Bank Username" ng-model="linkAccount.bankUserName">
+        </div>
+        <div>
+            <input type="password" name="" value="" class="form-control" placeholder="Bank Password" ng-model="linkAccount.bankPassword">
+        </div>        
+        <div>
+            <button type="submit" ng-click="linkMyBank()" class="btn btn-primary">Link my bank</button>
+        </div>
+    </form>
+</div>
+<div class="col-md-4"></div>

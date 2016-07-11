@@ -1,0 +1,29 @@
+<form>
+    <div>
+        </br>
+        <div class="form-group">
+            <select class="form-control" ng-model="selectedBank">
+                            <option value="">Select the bank</option>4
+                            <option value="chase">Chase</option>
+                            <option value="amex">American Express</option>
+                            <option value="schwab">Charles Schwab</option>
+                            <option value="wells">Wells Fargo</option>
+                            <option value="fidelity">Fidelity</option>
+                            <option value="nfcu">Navy Federal Credit Union</option>
+                            <option value="suntrust">SunTrust</option>
+                            <option value="citi">Citi</option>
+                        </select>
+        </div>
+        <div class="form-group">
+            <input type="texti" name="" value="" class="form-control" ng-model="bankUserName" placeholder="Bank Username">
+        </div>
+
+        <div class="form-group">
+            <input type="password" name="" value="" class="form-control" ng-model="bankPassword" placeholder="Bank Password">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary form-control" ng-click="registerUser()">Register with Bank Account</button>
+        </div>
+    </div>
+</form>

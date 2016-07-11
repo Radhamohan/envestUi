@@ -1,0 +1,22 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-alpha.5/angular-ui-router.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+        <script src="./js/dashboardApp.js"></script>
+        <style>
+        body{           
+            margin: 5px;
+            border: 1px solid black;
+            background: #eee;
+            z-index: 1;
+        }
+        
+        </style>
+    </head>
+    <body ng-app="dashboardApp" ng-controller="dashboardController">
+         <div ui-view></div>
+    </body>
+</html>

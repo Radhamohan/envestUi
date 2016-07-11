@@ -1,0 +1,73 @@
+<style>
+    .form-container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .form-cell {
+        width: 50%;
+    }
+    
+    .form-width {
+        width: 100%;
+    }
+</style>
+<div class="col-md-2"></div>
+<div class="col-md-5">
+    <form class="form-horizontal form-width">
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">Name:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.names[0]">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">Address Line 1:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.addresses[0].street">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">Address Line 2:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.addressLine2">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">City:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.addresses[0].city">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">State:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.addresses[0].state">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">Zip:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.addresses[0].zip">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">Phone:</label>
+            <div class="col-sm-10">
+                <input type="text" name="" value="" class="form-control" ng-model="userInfo.phone_numbers[0].number">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">Email:</label>
+            <div class="col-sm-10">
+                <input type="email" name="" value="" class="form-control" ng-model="userInfo.emails[0].email">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" ng-click="saveUserInfo()" class="btn btn-primary">Save User Info</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="col-md-5"></div>

@@ -1,0 +1,27 @@
+<style>
+.table-border{
+    border: 1px solid black;
+    padding: 5px;
+}
+</style>
+
+<div ui-view="header"></div>
+
+<div class="jumbotron">
+    <div class="col-md-1"></div>
+    <div ui-view="left-middle" class="col-md-3"></div>
+    <div class="col-md-3"></div>    
+    <div class="col-md-3">
+        <table class="table table-bordered">
+            <tr>
+                <td><a ui-sref="existingUser" class="btn btn-primary">Existing User</a></td>
+                <td><a ui-sref="newUser" class="btn btn-success">New User</a></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div ui-view="right-middle"></div></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-2"></div>    
+</div>
+<div ui-view="footer"></div>

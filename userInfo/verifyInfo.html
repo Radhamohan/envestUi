@@ -1,0 +1,36 @@
+<div class="col-md-2">
+    
+</div>
+<div class="col-md-4">
+    <a ui-sref="editInfo" class="btn btn-danger">Edit User Details</a>
+    </br>
+    </br>
+        
+    <address>
+        <strong>{{ userInfo.names[0] }}</strong>
+        <br>
+        </br>
+        <span>{{ userInfo.addresses[0].street }}</span> 
+        </br>
+        <span>{{ userInfo.addressLine2 }}</span> 
+        </br>
+        <span>{{ userInfo.addresses[0].city }}</span> 
+        </br>
+        <span>{{ userInfo.addresses[0].state }}</span> 
+        </br>
+        <span>{{ userInfo.addresses[0].zip }}</span> 
+        </br>
+        </br>
+        <abbr title="Phone">P:</abbr> <span>{{ userInfo.phone_numbers[0].number }}</span>
+    </address>
+    
+    <address>
+        <a href="mailto:#"> {{ userInfo.emails[0].email }} </a>
+    </address>
+    </br>
+    <button type="submit" class="btn btn-primary form-control" ng-click="openDashboard()">Yes, the information is correct</button>
+</div>
+
+<div class="col-md-6">
+    
+</div>

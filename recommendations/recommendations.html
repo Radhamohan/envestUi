@@ -1,0 +1,104 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 5px;
+            border: 1px solid black;
+            background: #eee;
+            z-index: 1;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-alpha.5/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="./js/recommendationsApp.js"></script>
+
+
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Work', 0.01],
+                ['Eat', 1.2],
+                //['Commute', 1.1]
+            ]);
+
+            var options = {
+                title: 'My Daily Activities',
+                is3D: true,
+                slices: {
+                    0: {
+                        offset: 0.01
+                    },
+                    1: {
+                        offset: 0.01
+                    },
+
+                }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script>
+
+        google.charts.setOnLoadCallback(drawSeriesChart);
+
+        function drawSeriesChart() {
+
+            //var data = google.visualization.arrayToDataTable([
+              //  ['Code', 'Constant', 'Interest Rate', 'Bank', 'Population'],
+                //['Chase', 1, 0.01, 'Chase', .01],
+                //['Bank A', 1, 0.9, 'Bank A', 0.9],
+                //['Bank B', 1, 1.1, 'Bank B', 1.1],
+                //['Bank C', 1, 1.25, 'Bank C', 1.25]                
+            //]);
+            
+            var data = google.visualization.arrayToDataTable([
+                ['Code', 'Constant', 'Interest Rate', 'Bank', 'Population'],
+                ['Chase', 1, 0.01, 'Chase', .01],
+                ['Bank A', 1, 0.9, 'Bank A', 0.9],
+                ['Bank B', 1, 1.1, 'Bank B', 1.1],
+                ['Bank C', 1, 1.25, 'Bank C', 1.25]                
+            ]);
+
+            var options = {
+                title: 'Correlation between life expectancy, fertility rate ' +
+                    'and population of some world countries (2010)',
+                
+                vAxis: {
+                    title: 'Interest Rate'
+                },
+                bubble: {
+                    textStyle: {
+                        fontSize: 11
+                    }
+                }
+            };
+
+            var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+    </script>
+
+</head>
+
+<body ng-app="recommendationsApp">
+    <div ui-view></div>
+</body>
+
+</html>
