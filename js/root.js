@@ -72,7 +72,7 @@ rootApp.controller('loginController', function($rootScope, $scope, $http) {
     };
     
      $scope.signIn = function() {              
-        $http.get("http://envestment.herokuapp.com/eNvest/UserService/test").success(function(data, status) {
+        $http.get("https://envestment.herokuapp.com/eNvest/UserService/test").success(function(data, status) {
             $scope.userId = data.userKey;
             parent.location = './dashboard/dashboard.html?userId=' + $scope.userId;
         });        
