@@ -94,7 +94,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     var userId = queries[1].replace("userId=", "").split("#")[0];
     $scope.userId = userId;
     
-    $http.get("http://localhost:8080/eNvestS/eNvest/UserAccountService/users/accounts?userKey=" + $scope.userId).success(function(data, status) {
+    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/accounts?userKey=" + $scope.userId).success(function(data, status) {
         $scope.accounts = data.accounts;//getAccounts(data);
     });
 

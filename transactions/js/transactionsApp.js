@@ -92,7 +92,7 @@ transactionsApp.controller('transactionsController', function($rootScope, $scope
     var queries2 = queries[1].split("&");
     var accountId = queries2[0].replace("accountId=", "");
     var userId = queries2[1].replace("userId=", "");
-    $http.get("http://localhost:8080/eNvestS/eNvest/UserAccountService/users/transactions?userKey=" + userId).success(function(data, status) {
+    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/transactions?userKey=" + userId).success(function(data, status) {
         $scope.transactions = getTransactions(data, accountId);
         $scope.accountId = 'QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK';
     });
