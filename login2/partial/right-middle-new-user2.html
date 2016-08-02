@@ -1,0 +1,46 @@
+<uib-tabset active="1">
+    <uib-tab index="0" heading="Existing User" ui-sref="existingUser"></uib-tab>
+    <uib-tab index="1" heading="New User" ui-sref="newUser"></uib-tab>
+</uib-tabset>
+
+<form class="uk-form" data-uk-margin>
+    
+    <fieldset data-uk-margin>        
+
+        </br>
+        <div class="uk-form-row">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-1-2">
+                    <input type="text" name="" value="" placeholder="First Name">
+                </div>
+                <div class="uk-width-1-2">
+                    <input type="text" name="" value="" placeholder="Last Name">
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-form-row">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-1-1">
+                    <input type="text" name="" value="" class="form-control" ng-model="userName" placeholder="Username">
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-form-row">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-1-1">
+                    <input type="password" name="" value="" class="form-control" ng-model="password" placeholder="Password">
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-form-row">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-1-1">
+                    <button type="submit" class="btn btn-primary form-control" ng-click="registerUser()">Register</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>

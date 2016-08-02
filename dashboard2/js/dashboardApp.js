@@ -1,5 +1,6 @@
-var dashboardApp = angular.module('dashboardApp', ['ngAnimate', 'ui.bootstrap', 'ui.router']);
-
+var dashboardApp = angular.module('dashboardApp', ['ngAnimate', 'ui.router']);
+var regionUrl;
+var bankData;
 dashboardApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/accounts');
 
@@ -16,10 +17,26 @@ dashboardApp.config(function($stateProvider, $urlRouterProvider) {
                 controller: 'headerController'
             },
             'footer@accounts': {
-                templateUrl: '../footer.html'
+                templateUrl: '../footer2.html'
             },
             'middle@accounts': {
-                templateUrl: './accounts.html'
+                templateUrl: './partial/recommendations.html'
+            },
+            'main@accounts': {
+                templateUrl: './partial/main.html'
+            },
+            'bankData@accounts': {
+                templateUrl: './partial/bankData.html'
+            },
+            'region1@accounts': {
+                templateUrl: './partial/hya.html'
+            },
+            'region2@accounts': {
+                templateUrl: './partial/mip.html'
+            },
+
+            'region3@accounts': {
+                templateUrl: './partial/cd.html'
             }
         }
     })
@@ -38,7 +55,7 @@ dashboardApp.config(function($stateProvider, $urlRouterProvider) {
                 templateUrl: '../footer.html'
             },
             'middle@transferExisting': {
-                templateUrl: './transferExisting.html'
+                templateUrl: './partial/transferExisting.html'
             }
         }
     })
@@ -87,16 +104,121 @@ function getAccounts(data) {
 // To be removed
 
 dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state) {
-    var queryString = decodeURIComponent(window.location.href);
-    queryString = queryString.substring(1);
+    $scope.user = {};
 
-    var queries = queryString.split("?");
-    var userId = queries[1].replace("userId=", "").split("#")[0];
-    $scope.userId = userId;
-    
-    $http.get("http://localhost:8080/eNvestS/eNvest/UserAccountService/users/accounts?userKey=" + $scope.userId).success(function(data, status) {
-        $scope.accounts = data.accounts;//getAccounts(data);
-    });
+    $scope.user.userKey = getQueryStringKeyValue(window.location.href, "userKey");
+    $state.go("load")
+    $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
+            "userKey=" + $scope.user.userKey)
+        .success(function(data, status) {
+            for (i = 0; i < data.length; i++) {
+                if (data[i].productType == "CertificateOfDeposit") {
+                    regionUrl = './partial/cd.html';
+                    $scope.cd = data[i];
+                    $scope.cd.interestRate = 1.7;
+                    $scope.cd.maturityYears = 3;
+                }
+                if (data[i].productType == "HighYieldAccount") {
+                    regionUrl = './partial/hya.html';                    
+                    $scope.hya = data[i];
+                    $scope.hya.interestRate = 1.1;
+                }
+                if (data[i].productType == "MonthlyInvestmentPlan") {
+                    regionUrl = './partial/mip.html';
+                    $scope.mip = data[i];
+                    $scope.mip.interestRate = 1.2;
+                    $scope.mip.noOfYears = 3;
+                }
+            }
+            $state.go("accounts");
+        });
+        
+        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
+            "userKey=" + $scope.user.userKey)
+        .success(function(data, status) {
+            for (i = 0; i < data.length; i++) {
+                if (data[i].productType == "CertificateOfDeposit") {
+                    regionUrl = './partial/cd.html';
+                    $scope.cd = data[i];
+                    $scope.cd.interestRate = 1.7;
+                    $scope.cd.maturityYears = 3;
+                }
+                if (data[i].productType == "HighYieldAccount") {
+                    regionUrl = './partial/hya.html';                    
+                    $scope.hya = data[i];
+                    $scope.hya.interestRate = 1.1;
+                }
+                if (data[i].productType == "MonthlyInvestmentPlan") {
+                    regionUrl = './partial/mip.html';
+                    $scope.mip = data[i];
+                    $scope.mip.interestRate = 1.2;
+                    $scope.mip.noOfYears = 3;
+                }
+            }
+            $state.go("accounts");
+        });
+
+    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getDashBoard?" +
+            "userKey=" + $scope.user.userKey)
+        .success(function(data, status) {
+            $scope.accounts = data.accounts;
+            bankData = {};
+            bankData['summary'] = {};
+
+            var arr = [];
+            var bankBalances = data.dashBoardSummary.bankBalances;
+
+            for (i = 0; i < bankBalances.length; i++) {
+                arr.push({
+                    "label": bankBalances[i].bankName,
+                    "value": Math.round(bankBalances[i].availableBalance * 100) / 100
+                })
+            }
+
+            bankData['summary'].content = arr;
+
+            bankData['Chase'] = {
+                "content": [{
+                    "label": "Checking",
+                    "value": 5000,
+                }, {
+                    "label": "Summary",
+                    "value": 15000,
+                }]
+            };
+
+            bankData['Wells Fargo'] = {
+                "content": [{
+                    "label": "Checking",
+                    "value": 5000,
+                }, {
+                    "label": "Summary",
+                    "value": 5000,
+                }]
+            };
+
+            drawPieChart(bankData['summary'], 'bankSummary');
+        });
+
+
+    $scope.getMipMaturity = function() {
+        var effectiveRate = $scope.mip.interestRate / 100 / 12;
+        var num = $scope.mip.monthlyCashFlow * ((Math.pow(1 + effectiveRate, $scope.mip.noOfYears * 12) - 1) / effectiveRate);
+        return $scope.formatNumber(num)
+    };
+
+    $scope.getCDMaturity = function() {
+        var effectiveRate = $scope.cd.interestRate / 100;
+        var num = $scope.cd.principle * (Math.pow(1 + effectiveRate, $scope.cd.maturityYears));
+        return $scope.formatNumber(num)
+    };
+
+    $scope.getValueAfterPeriod = function(year) {
+        var effectiveRate = $scope.hya.interestRate / 100;
+        var num = $scope.hya.principle * (Math.pow(1 + effectiveRate, year));
+        return $scope.formatNumber(num)
+    };
+
 
     $scope.accounts1 = [{
         accountNo: '123',
@@ -142,11 +264,15 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
 
     $scope.currentYields = [0.02, 0.03, 0.04, 0.02, 0.03];
     $scope.recommendedYields = [0.9, 1.0, 1.1, 1.2, 1.25];
-   
+
 
     $scope.getTransactions = function(accountId) {
         parent.location = '../transactions/transactions.html#/listTransactions?accountId=' + accountId + '&userId=' + userId;
     };
+
+    $scope.linkAnotherAccount = function() {
+        parent.location = '../linkBank/bank.html?userKey=' + $scope.user.userKey;
+    }
 
 
     $scope.getYield = function(principal, yield, years) {
@@ -173,7 +299,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
         if ($scope.accounts != null) {
             angular.forEach($scope.accounts, function(account) {
                 num += $scope.getYieldUnformated(account.balance.available, account.yield, years);
-            });            
+            });
         }
         return $scope.formatNumber(num);
     };
@@ -198,19 +324,33 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             return $scope.formatNumber(num);
         else return num;
     };
-    
-    $scope.getSum = function (num1, num2) {
-      if(isNaN(Number(num2)))
-      return $scope.formatNumber(num1); 
-        
-      var num = Number(num1) + Number(num2);  
-      return $scope.formatNumber(num); 
+
+    $scope.getAverageYield = function() {
+        var num = 0;
+        var index = 0;
+        angular.forEach($scope.accounts, function(account) {
+            index++;
+            num += Number(account.yield);
+        });
+
+        return num / index;
     };
 
-    $scope.formatNumber = function(num1) {        
+    $scope.getSum = function(num1, num2) {
+        if (isNaN(Number(num2)))
+            return $scope.formatNumber(num1);
+
+        var num = Number(num1) + Number(num2);
+        return $scope.formatNumber(num);
+    };
+
+    $scope.formatNumber = function(num1) {
         return numeral(num1).format('($0,0.00)');
     };
 
+    $scope.formatNonCurrencyNumber = function(num1) {
+        return numeral(num1).format('(0,0.00)');
+    };
     $scope.getAmountAvailabeForTransfer = function(isFormatted) {
         var num = 0;
         angular.forEach($scope.accounts, function(account) {
@@ -268,9 +408,5 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
 
     $scope.transferExisting = function() {
         $state.go('transferExisting');
-    };
-    
-    $scope.linkAnotherAccount = function() {
-        parent.location = '../userInfo/userInfo.html#linkNewAccount?userId=' + $scope.userId;
     };
 });

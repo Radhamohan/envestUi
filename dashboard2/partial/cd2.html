@@ -1,0 +1,40 @@
+<div class="uk-thumbnail uk-width-1-1">
+    <legend>Certificate Of Deposit</legend>
+    <hr>
+
+    <div class="uk-grid" data-uk-grid-margin>
+
+        <div class="uk-width-4-10"></div>
+        <div class="uk-width-2-10"> <label for=""> <h4 class="text-primary">Bank A</h4></label></div>
+        <div class="uk-width-4-10"></div>
+
+
+        <div class="uk-width-1-2">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-2-10"></div>
+                <div class="uk-width-8-10"><label for="">Deposit Amount (<i class="uk-icon-dollar"></i>)</label></div>
+
+                <div class="uk-width-2-10"></div>
+                <div class="uk-width-8-10">
+                    <input type="text" name="" ng-model="cd.principle">
+                    <label for=""><span>@ {{cd.term}}% APY for {{cd.term}} Year(s)</span></label>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="uk-width-1-2">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-2-10"></div>
+                <div class="uk-width-8-10"><label for="">Maturity Value <h3>{{getCDMaturity()}}</h3></label></div>                
+            </div>
+        </div>
+
+
+        <div class="uk-width-8-10"></div>
+        <div class="uk-width-2-10">
+            <button type="" class="uk-button-primary">Apply</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div>
+    <table class="bordered white-text">
+        <thead class="grey darken-2">
+            <th>Total Balance</th>
+            <th>Projected Interest 1 Year</th>
+            <th>Projected Interest 5 Year</th>
+            <th>eNvest Projected Interest 1 Year</th>
+            <th>eNvest Projected Interest 5 Year</th>
+        </thead>
+        <tr class="red lighten-2">
+            <td>{{getTotalAvailableFunds(true)}}</td>
+            <td>{{getEnvestProjectedInterest(getAverageYield(), 1)}}
+                </br>
+                {{'(' + formatNonCurrencyNumber(getAverageYield()) + '% APY)'}}
+            </td>
+            <td>{{getEnvestProjectedInterest(getAverageYield(), 5)}}</td>
+            <td>{{getEnvestProjectedInterest(1.1, 1)}}</td>
+            <td>{{getEnvestProjectedInterest(1.1, 5)}}</td>
+        </tr>
+    </table>
+</div>
+</br>
+</br>
+<div>
+    <table class="bordered indigo white-text">
+        <thead class="grey darken-2">
+            <th data-field="id">Bank</th>
+            <th data-field="name">Account Type</th>
+            <th data-field="price">Account Number</th>
+            <th data-field="price">Total Balance</th>
+            <th data-field="price">Projected Interest 1 Year</th>
+            <th data-field="price">Projected Interest 5 Year</th>
+            <th data-field="price">eNvest 1 Year</th>
+            <th data-field="price">eNvest 5 Year</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="account in accounts" class="blue lighten-2">
+                <td>{{account.responseFor}}</td>
+                <td>
+                    {{account.meta.name}}
+                    </br>
+                    {{'(' + account.yield + '% APY)'}}
+                </td>
+                <td>{{account.meta.number}}</td>
+                <td>{{formatNumber(account.balance.available)}}</td>
+                <td>{{getYield(account.balance.available, account.yield, 1)}}</td>
+                <td>{{getYield(account.balance.available, account.yield, 5)}}</td>
+                <td>{{getYield(account.balance.available, 1.1, 1)}}</td>
+                <td>{{getYield(account.balance.available, 1.1, 5)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

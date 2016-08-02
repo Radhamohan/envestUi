@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col s4 offset-s4">
+
+        <div class="row">
+
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <h5>Welcome Back.</h5>
+            </div>
+            <div class="col s6 right">
+                <a class="btn blue" ui-sref="newUser">New User ?</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">email</i>
+                        <input id="email" type="email" class="validate" ng-model="existingUser.userName">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">grade</i>
+                        <input id="password" type="password" class="validate" ng-model="existingUser.password">
+                        <label for="password" class="active">Password</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <a class="waves-effect waves-light btn" ng-click="signIn()">Login</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

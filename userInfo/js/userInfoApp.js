@@ -208,7 +208,7 @@ userInfoApp.controller('userInfoController', function($rootScope, $scope, $http,
 
 
 
-        $http.get("https://envestment.herokuapp.com/eNvest/UserService/users/getInfo?userID=" + userName + "&password=" + password + "&bank=" + bankName).success(function(data, status) {
+        $http.get("http://localhost:8080/eNvestS/eNvest/UserService/users/getInfo?userID=" + userName + "&password=" + password + "&bank=" + bankName).success(function(data, status) {
             if (data.responseType == 'device') {
                 $scope.mfa = data;
                 $state.go('device');
@@ -234,7 +234,7 @@ userInfoApp.controller('userInfoController', function($rootScope, $scope, $http,
     };
 
     $scope.signIn = function() {
-        $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/saveUser?userKey=" + $scope.userInfo.userId + "&userID=" + $scope.userInfo.userName + "&password=" + $scope.userInfo.password).success(function(data, status) {
+        $http.post("http://localhost:8080/eNvestS/eNvest/UserService/users/saveUser?userKey=" + $scope.userInfo.userId + "&userID=" + $scope.userInfo.userName + "&password=" + $scope.userInfo.password).success(function(data, status) {
             $scope.userId = data.id
             $state.go('verifyInfo');
         });
@@ -245,7 +245,7 @@ userInfoApp.controller('userInfoController', function($rootScope, $scope, $http,
     };
 
     $scope.linkMyBank = function() {        
-         $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/linkAccount?userKey=" + $scope.linkAccount.userId + "&userID=" + $scope.linkAccount.bankUserName + "&password=" + $scope.linkAccount.bankPassword + "&bank=" + $scope.linkAccount.selectedBank).success(function(data, status) {
+         $http.post("http://localhost:8080/eNvestS/eNvest/UserService/users/linkAccount?userKey=" + $scope.linkAccount.userId + "&userID=" + $scope.linkAccount.bankUserName + "&password=" + $scope.linkAccount.bankPassword + "&bank=" + $scope.linkAccount.selectedBank).success(function(data, status) {
             $scope.userId = data.userKey
             parent.location = '../dashboard/dashboard.html?userId=' + data.userKey;
         });

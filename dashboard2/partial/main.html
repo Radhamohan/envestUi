@@ -1,0 +1,167 @@
+<script src="d3pie.min.js" type="text/javascript"></script>
+<script type="text/javascript">    
+    function drawPieChart(x, divId) {
+        var pie = new d3pie(divId, {
+            "header": {
+                "title": {
+                    "text": "",
+                    "fontSize": 22,
+                    "font": "verdana"
+                },
+                "subtitle": {
+                    "text": "",
+                    "color": "#999999",
+                    "fontSize": 10,
+                    "font": "verdana"
+                },
+                "titleSubtitlePadding": 12
+            },
+            "footer": {
+                "text": "",
+                "color": "#999999",
+                "fontSize": 11,
+                "font": "open sans",
+                "location": "bottom-center"
+            },
+            "size": {
+                "canvasHeight": 350,
+                "canvasWidth": 350,
+                "pieInnerRadius": "38%",
+                "pieOuterRadius": "60%"
+            },
+            "data": x,
+            "labels": {
+                "outer": {
+                    "pieDistance": 32
+                },
+                "inner": {
+                    "format": "value"
+                },
+                "mainLabel": {
+                    "font": "verdana"
+                },
+                "percentage": {
+                    "color": "#e1e1e1",
+                    "font": "verdana",
+                    "decimalPlaces": 0
+                },
+                "value": {
+                    "color": "#e1e1e1",
+                    "font": "verdana"
+                },
+                "lines": {
+                    "enabled": true,
+                    "color": "#cccccc"
+                },
+                "truncation": {
+                    "enabled": true
+                }
+            },
+            "tooltips": {
+                "enabled": true,
+                "type": "placeholder",
+                "string": "{label}: ${value}, {percentage}%"
+            },
+            "effects": {
+                "pullOutSegmentOnClick": {
+                    "effect": "linear",
+                    "speed": 400,
+                    "size": 8
+                }
+            },
+            "callbacks": {
+                "onClickSegment": function(a) {
+                    $("#bankSummary").empty();
+                    drawPieChart(bankData[a.data.label], 'bankSummary');
+                }
+            }
+        });
+    }
+    
+    var y = {
+        "content": [{
+            "label": "Savings",
+            "value": 20000,
+            //"color": "#7b6688"
+        }, {
+            "label": "Checking",
+            "value": 10000,
+            //"color": "#d8d138"
+        }]
+    };
+
+    
+    //drawPieChart(x);
+
+    google.charts.load('current', {
+        'packages': ['corechart', 'bar']
+    });
+
+    google.charts.setOnLoadCallback(drawChart2);
+
+    function drawChart2() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['API Category', 'Salary', 'Interest', 'Misc', 'Storage',
+                'Weather', {
+                    role: 'annotation'
+                }
+            ],
+            ['Inflow', 98, 53, 12, 16, 6, ''],
+            ['Outflow', 151, 34, 26, 36, 49, ''],
+        ]);
+
+        var options = {
+            legend: {
+                position: 'top',
+                maxLines: 3,
+                textStyle: {
+                    color: 'black',
+                    fontSize: 16
+                }
+            },
+            bar: {
+                groupWidth: 20,
+            },
+            isStacked: true,
+            backgroundColor: '#ffebee',
+            animation: {
+                duration: 1000,
+                easing: 'out',
+                'startup': true
+            },
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('inflowChart'));
+        chart.draw(data, options);
+    }
+</script>
+
+
+</br>
+<div class="row">
+    <div class="col s12">
+        <a href="" class="btn" ng-click="linkAnotherAccount()">Link Another Account</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 purple">
+        <h5 class="white-text">Bank Account Summary</h5>
+    </div>
+    <div class="row">
+        <div class="col s5 center"> 
+            <div id="bankSummary" class=""></div>            
+        </div>
+        
+        <div class="col s2"></div>
+        
+        <div class="col s5">
+            <div id="inflowChart" class=""></div>            
+        </div>
+    </div>
+</div>
+<script>
+    //alert(window.innerHeight + ' ' + window.innerWidth);
+    //var b = $('#bankSummary');
+    //alert(b.height() + ' ' + b.width());
+</script>

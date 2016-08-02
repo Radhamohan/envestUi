@@ -1,0 +1,195 @@
+<style>
+    .white-text {
+        color: #fff;
+    }
+    
+    .back {
+        background: wheat;
+    }
+</style>
+
+<div class="container">
+    <div class="col-md-2">
+        <a ng-click="openRecommendations()" class="btn btn-warning">Recommendations</a>
+
+    </div>
+    <div class="col-md-2">
+        <a href="" class="btn btn-info" ng-click="linkAnotherAccount()">Link Another Account</a>
+    </div>
+    <div class="col-md-8">
+
+    </div>
+</div>
+</br>
+
+<div class="container back">
+
+    </br>
+    <div class="row">
+        <div class="col-md-2 col-xs-2 col-sm-2"></div>
+        <div class="col-md-2 col-xs-2 col-sm-2">
+            <div class="thumbnail">
+                <div class="caption label-info">
+                    <h3 class="text-default white-text">Total Funds <span>{{ getTotalAvailableFunds(true) }}</span></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3">
+            <div class="thumbnail">
+                <div class="caption label-warning">
+                    <table class="table white-text">
+                        <tr>
+                            <td colspan="2">
+                                <h3>Projected Interest Income</h3></td>
+                        </tr>
+                        <tr>
+                            <td>1 Year:</td>
+                            <td>{{getTotalProjectedInterest(1)}}</td>
+                        </tr>
+                        <tr>
+                            <td>5 Year:</td>
+                            <td>{{getTotalProjectedInterest(5)}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3">
+            <div class="thumbnail">
+                <div class="caption label-success">
+                    <table class="table white-text">
+                        <tr>
+                            <td colspan="2">
+                                <h3>Projected Interest with eNvest Account</h3></td>
+                        </tr>
+                        <tr>
+                            <td>1 Year:</td>
+                            <td>{{getEnvestProjectedInterest(1.1, 1)}}</td>
+                        </tr>
+                        <tr>
+                            <td>5 Year:</td>
+                            <td>{{getEnvestProjectedInterest(1.1, 5)}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h4>Current Accounts</h4>
+            <table class="table table-hover table-bordered">
+                <tr class="success">
+                    <th class="text-center text-danger" colspan=8>Regular Accounts</th>
+                </tr>
+                <tr class="success">
+                    <th class="text-center  label-info">Bank Name</th>
+                    <th class="text-center">Account#</th>
+                    <th class="text-center">Account Type</th>
+                    <th class="text-center">Balance</th>
+                    <th class="text-center" colspan=2>
+                        Projected Interest
+                    </th>
+                    <th class="text-center" colspan=2>
+                        <span>Projected Interest <span class="label label-success">eNvest</span></span>
+
+                    </th>
+                </tr>
+                <tr class="success">
+                    <th class="text-center" colspan=4></th>
+                    <th class="text-center">1 Year</th>
+                    <th class="text-center">5 Year</th>
+                    <th class="text-center">1 Year</th>
+                    <th class="text-center">5 Year</th>
+                </tr>
+                <tbody ng-repeat="account in accounts">
+                    <tr class="warning">
+                        <td class="text-center">{{ account.institution_type }}</td>
+                        <td class="text-center"><a href="" ng-click="getTransactions(account.accountId)">{{ account.meta.number }}</a></td>
+                        <td class="text-center">{{ account.meta.name }} (<span>{{ account.yield }} %</span>)</td>
+                        <td class="text-center">{{ formatNumber(account.balance.available) }}</td>
+                        <td class="text-right text-danger">{{ getYield(account.balance.available, account.yield, 1) }}</td>
+                        <td class="text-right text-danger">{{ getYield(account.balance.available, account.yield, 5) }}</td>
+                        <td class="text-center success">{{ getYield(account.balance.available, 1.1, 1) }}
+                            </br><span class="text-success">Up by:{{ getIncreaseInYield(account.balance.available,  account.yield, 1.1, 1) }}
+                        </td>
+                        <td class="text-center text-danger">{{ getYield(account.balance.available,  1.2, 5) }} 
+                            </br> <span class="text-success text-center">Up by:{{ getIncreaseInYield(account.balance.available,  account.yield, 1.1, 5) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9"></div>
+        <div class="col-md-1"><button type="submit" ng-click="transferExisting()" class="btn btn-success">Transfer to eNvest Account</button></div>
+        <div class="col-md-2"></div>
+    </div>
+
+    </br>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <table class="table table-hover table-bordered">
+                <tr class="success">
+                    <th class="text-center" colspan=6>Existing Envest Accounts</th>
+
+                </tr>
+                <tr class="warning" ng-repeat="account in existingEnvestAccounts">
+                    <td class="text-center">{{ account.bankName }}</td>
+                    <td class="text-center">{{ account.accountNo }}</td>
+                    <td class="text-center">{{ account.accountType }} </br> ( <span>{{ account.yield }} %</span> )</td>
+                    <td class="text-center">{{ formatNumber(account.balance) }}</td>
+
+                    <td class="text-right text-danger">
+                        {{ getYield(account.balance, account.yield, 1) }}
+                    </td>
+                    <td class="text-right text-danger">{{ getYield(account.balance, account.yield, 5) }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h4>Open new eNvest Accounts</h4>
+            <table class="table table-hover table-bordered">
+                <tr class="success">
+                    <th class="text-center">Bank Name</th>
+                    <th class="text-center">Balance</th>
+                    <th class="text-center">Yields</th>
+                    <th class="text-center" colspan=2>Projected Yields</th>
+                    <th class="text-center"></th>
+                </tr>
+                <tr class="success">
+                    <th class="text-center" colspan=3></th>
+                    <th class="text-center">1 Year Projection</th>
+                    <th class="text-center">5 Year Projection</th>
+                    <th class="text-center"></th>
+                </tr>
+                <tr class="warning" ng-repeat="account in envestAccounts">
+                    <td class="text-center">{{ account.bankName }}</td>
+                    <td><input type="number" name="" value="" ng-model="amount"></td>
+                    <td class="text-center">{{ account.yield }} %</td>
+                    <td class="text-right text-danger">{{ getYield(amount, account.yield, 1) }}</td>
+                    <td class="text-right text-danger">{{ getYield(amount, account.yield, 5) }}</td>
+                    <td><button class="btn btn-success" type="submit">Open Account</button></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+</div>

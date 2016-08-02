@@ -1,0 +1,123 @@
+<html>
+<head>
+    <style>
+    .t {
+     background: pink;   
+    }
+    </style>
+</head>
+<body class="t">
+
+<div id="pieChart"></div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
+<script src="d3pie.min.js"></script>
+<script>
+    
+function drawChart(x) {
+var pie = new d3pie("pieChart", {
+	"header": {
+		"title": {
+			"text": "Banks",
+			"fontSize": 22,
+			"font": "verdana"
+		},
+		"subtitle": {
+			"text": "",
+			"color": "#999999",
+			"fontSize": 10,
+			"font": "verdana"
+		},
+		"titleSubtitlePadding": 12
+	},
+	"footer": {
+		"text": "",
+		"color": "#999999",
+		"fontSize": 11,
+		"font": "open sans",
+		"location": "bottom-center"
+	},
+	"size": {
+		"canvasHeight": 400,
+		"canvasWidth": 590,
+		"pieInnerRadius": "50%",
+		"pieOuterRadius": "88%"
+	},
+	"data": x,
+	"labels": {
+		"outer": {
+			"pieDistance": 32
+		},
+		"inner": {
+			"format": "value"
+		},
+		"mainLabel": {
+			"font": "verdana"
+		},
+		"percentage": {
+			"color": "#e1e1e1",
+			"font": "verdana",
+			"decimalPlaces": 0
+		},
+		"value": {
+			"color": "#e1e1e1",
+			"font": "verdana"
+		},
+		"lines": {
+			"enabled": true,
+			"color": "#cccccc"
+		},
+		"truncation": {
+			"enabled": true
+		}
+	},
+	"tooltips": {
+		"enabled": true,
+		"type": "placeholder",
+		"string": "{label}: ${value}, {percentage}%"
+	},
+	"effects": {
+		"pullOutSegmentOnClick": {
+			"effect": "linear",
+			"speed": 400,
+			"size": 8
+		}
+	},
+	"callbacks": {}
+});
+}
+
+var x = {
+		"content": [
+			{
+				"label": "Chase",
+				"value": 20000,
+				//"color": "#7b6688"
+			},
+			{
+				"label": "Wells Fargo",
+				"value": 10000,
+				//"color": "#d8d138"
+			},
+			{
+				"label": "Bank Of America",
+				"value": 3000,
+				//"color": "#64a61f"
+			},
+			{
+				"label": "Citi",
+				"value": 6000,
+				//"color": "#961818"
+			},
+            {
+				"label": "Wow",
+				"value": 50000,
+				//"color": "#961818"
+			}
+		]
+	};
+drawChart(x);
+</script>
+
+</body>
+</html>
