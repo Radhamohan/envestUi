@@ -73,26 +73,31 @@ linkBankApp.controller('headerController', function($rootScope, $scope, $http) {
 linkBankApp.controller('linkBankController', function($rootScope, $scope, $http, $state) {
     $scope.user = {};
     $scope.bankLogin = {};
-    
-    $scope.user.userKey = getQueryStringKeyValue(window.location.href, "userKey");    
+    $scope.bankLogin.error = true;
+
+    $scope.user.userKey = getQueryStringKeyValue(window.location.href, "userKey");
 
     $scope.headerClick = function() {
         parent.location = '../';
     };
 
-    $scope.selectBank = function(name) {        
-        $scope.bankLogin.name = name;        
-        $state.go('bankCredential');        
+    $scope.selectBank = function(name) {
+        $scope.bankLogin.name = name;
+        $state.go('bankCredential');
     };
 
     $scope.linkAccount = function() {
         $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/linkAccount?" +
-            "userKey=" + $scope.user.userKey +
-            "&userID=" + $scope.bankLogin.userName +
-            "&password=" + $scope.bankLogin.password +
-            "&bank=" + $scope.bankLogin.name)
+                "userKey=" + $scope.user.userKey +
+                "&userID=" + $scope.bankLogin.userName +
+                "&password=" + $scope.bankLogin.password +
+                "&bank=" + $scope.bankLogin.name)
             .success(function(data, status) {
-                parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
-        });
+                if (data.status == "failure" || data.status == "Failure")
+                    $scope.bankLogin.error = false;                    
+                else {
+                    parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
+                }
+            });
     };
 });

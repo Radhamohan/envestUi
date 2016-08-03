@@ -139,20 +139,14 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             for (i = 0; i < data.length; i++) {
                 if (data[i].productType == "CertificateOfDeposit") {
                     regionUrl = './partial/cd.html';
-                    $scope.cd = data[i];
-                    $scope.cd.interestRate = 1.7;
-                    $scope.cd.maturityYears = 3;
+                    $scope.cd = data[i];                    
                 }
                 if (data[i].productType == "HighYieldAccount") {
-                    regionUrl = './partial/hya.html';                    
-                    $scope.hya = data[i];
-                    $scope.hya.interestRate = 1.1;
+                    regionUrl = './partial/hya.html';
                 }
                 if (data[i].productType == "MonthlyInvestmentPlan") {
                     regionUrl = './partial/mip.html';
-                    $scope.mip = data[i];
-                    $scope.mip.interestRate = 1.2;
-                    $scope.mip.noOfYears = 3;
+                    $scope.mip = data[i];                    
                 }
             }
             $state.go("accounts");
@@ -408,5 +402,9 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
 
     $scope.transferExisting = function() {
         $state.go('transferExisting');
+    };
+    
+    $scope.showUserProfile = function() {
+       parent.location = '../profile/profile.html?userKey=' + $scope.user.userKey;  
     };
 });

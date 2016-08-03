@@ -106,15 +106,17 @@ rootApp.controller('headerController', function($rootScope, $scope, $http) {
 rootApp.controller('loginController', function($rootScope, $scope, $http, $state) {
     //alert(1);
     $scope.user = {};
+    $scope.user.error = true;
     $scope.existingUser = {};
+    $scope.existingUser.error = true;
 
     $scope.active = {
         one: false,
         two: true
     };
-    
+
     $scope.registerUser = function() {
-        $state.go("load");       
+        $state.go("load");
         $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/registerUser?" +
                 "userID=" + $scope.user.email +
                 "&password=" + $scope.user.password +
@@ -124,9 +126,9 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                 if (data.status == "Success") {
                     var qs = "?userKey=" + data.userKey;
                     parent.location = './linkBank/bank.html' + qs;
-                }
-                else {
-                    alert('Error creating user account!');
+                } else {
+                    $state.go("newUser");
+                    $scope.user.error = false;
                 }
             });
     };
@@ -141,23 +143,24 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                 "userID=" + $scope.existingUser.userName +
                 "&password=" + $scope.existingUser.password)
             .success(function(data, status) {
-                if (data.status == "Success" || true) {
+                if (data.status == "Success") {
                     var qs = "?userKey=" + data.userKey;
                     $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getDashBoard?" +
                             "userKey=" + data.userKey)
                         .success(function(data, status) {
-                            if (data.accounts.length == 0) {                                
+                            $scope.existingUser.errorFlag = true;
+                            if (data.accounts.length == 0) {
                                 parent.location = './linkBank/bank.html' + qs;
-                            } else if(data.accounts.length > 0){
+                            } else if (data.accounts.length > 0) {
                                 parent.location = './dashboard2/dashboard.html' + qs;
-                            }
-                            else {
-                                alert('Error authenticating user, try again!')            
+                            } else {
+                                $state.go("existingUser");
+                                $scope.existingUser.error = false;
                             }
                         });
-                }
-                else {
-                    alert('Error authenticating user, try again!')
+                } else {
+                    $state.go("existingUser");
+                    $scope.existingUser.error = false;
                 }
             });
     };
