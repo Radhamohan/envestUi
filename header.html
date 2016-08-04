@@ -1,9 +1,12 @@
-<nav>
-    <div class="nav-wrapper blue">
-        <a href="#" class="brand-logo left">eNvest</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="#">Login</a></li>
-            <li><a href="#" class="btn">Sign Up</a></li>            
-        </ul>
-    </div>
-</nav>
+<div>
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="#" class="brand-logo left">eNvest</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a ng-click="loginClick()" ng-hide="user.loggedIn">Login</a></li>
+                <li><a ng-click="logoutClick()" ng-hide="user.loggedOut">Logout</a></li>
+                <li><a ng-click="signUpClick()" class="btn">Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>

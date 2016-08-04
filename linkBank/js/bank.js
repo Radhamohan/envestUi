@@ -75,7 +75,7 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
     $scope.bankLogin = {};
     $scope.bankLogin.error = true;
 
-    $scope.user.userKey = getQueryStringKeyValue(window.location.href, "userKey");
+    $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
     $scope.headerClick = function() {
         parent.location = '../';

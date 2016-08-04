@@ -80,11 +80,9 @@ dashboardApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-dashboardApp.controller('headerController', function($rootScope, $scope, $http) {
-    $scope.headerClick = function() {
-        parent.location = '../';
-    };
-});
+intializeHeaderController(dashboardApp);
+
+
 
 // To be removed
 var getRandomSpan = function() {
@@ -104,10 +102,11 @@ function getAccounts(data) {
 // To be removed
 
 dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state) {
-    $scope.user = {};
+    $scope.user = {};        
+    $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
-    $scope.user.userKey = getQueryStringKeyValue(window.location.href, "userKey");
-    $state.go("load")
+    $state.go("load");
+    
     $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
             "userKey=" + $scope.user.userKey)
         .success(function(data, status) {
@@ -119,7 +118,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
                     $scope.cd.maturityYears = 3;
                 }
                 if (data[i].productType == "HighYieldAccount") {
-                    regionUrl = './partial/hya.html';                    
+                    regionUrl = './partial/hya.html';
                     $scope.hya = data[i];
                     $scope.hya.interestRate = 1.1;
                 }
@@ -132,21 +131,21 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             }
             $state.go("accounts");
         });
-        
-        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
+
+    $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
             "userKey=" + $scope.user.userKey)
         .success(function(data, status) {
             for (i = 0; i < data.length; i++) {
                 if (data[i].productType == "CertificateOfDeposit") {
                     regionUrl = './partial/cd.html';
-                    $scope.cd = data[i];                    
+                    $scope.cd = data[i];
                 }
                 if (data[i].productType == "HighYieldAccount") {
                     regionUrl = './partial/hya.html';
                 }
                 if (data[i].productType == "MonthlyInvestmentPlan") {
                     regionUrl = './partial/mip.html';
-                    $scope.mip = data[i];                    
+                    $scope.mip = data[i];
                 }
             }
             $state.go("accounts");
@@ -403,8 +402,8 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     $scope.transferExisting = function() {
         $state.go('transferExisting');
     };
-    
+
     $scope.showUserProfile = function() {
-       parent.location = '../profile/profile.html?userKey=' + $scope.user.userKey;  
+        parent.location = '../profile/profile.html?userKey=' + $scope.user.userKey;
     };
 });

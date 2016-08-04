@@ -97,11 +97,7 @@ rootApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-rootApp.controller('headerController', function($rootScope, $scope, $http) {
-    $scope.headerClick = function() {
-        parent.location = '#';
-    };
-});
+intializeHeaderController(rootApp);
 
 rootApp.controller('loginController', function($rootScope, $scope, $http, $state) {
     //alert(1);

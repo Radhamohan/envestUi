@@ -45,7 +45,7 @@ profileApp.config(function($stateProvider, $urlRouterProvider) {
 });
 
 profileApp.controller('headerController', function($rootScope, $scope, $http) {
-    $scope.headerClick = function() {
+    $scope.headerClick = function() {        
         parent.location = '../';
     };
 });
@@ -53,7 +53,7 @@ profileApp.controller('headerController', function($rootScope, $scope, $http) {
 
 profileApp.controller('profileController', function($rootScope, $scope, $http, $state) {
     $scope.profile = {};
-    $scope.profile.userKey = getQueryStringKeyValue(window.location.href, "userKey");
+    $scope.profile.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
     $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getUserProfile?" +
             "userKey=" + $scope.profile.userKey)
