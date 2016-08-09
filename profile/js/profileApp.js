@@ -1,4 +1,4 @@
-var profileApp = angular.module('profileApp', ['ngAnimate', 'ui.router']);
+var profileApp = angular.module('profileApp', ['ngAnimate', 'ui.router', 'ngCookies']);
 
 profileApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/profile');
@@ -44,14 +44,11 @@ profileApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-profileApp.controller('headerController', function($rootScope, $scope, $http) {
-    $scope.headerClick = function() {        
-        parent.location = '../';
-    };
-});
 
+intializeHeaderController(profileApp);
 
-profileApp.controller('profileController', function($rootScope, $scope, $http, $state) {
+profileApp.controller('profileController', function($rootScope, $scope, $http, $state, $cookies) {
+    alert(getCookie($cookies, 'test'));
     $scope.profile = {};
     $scope.profile.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
@@ -60,9 +57,26 @@ profileApp.controller('profileController', function($rootScope, $scope, $http, $
         .success(function(data, status) {
             $scope.profile = data;
         });
+        
+    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/accounts?" + 
+            "userKey=" + $scope.profileuserKey)
+            .success(function(data, status) {
+                
+            });
 
     $scope.formatNumber = function(num1) {
         num1 = num1 * -1;
         return numeral(num1).format('($0,0.00)');
     };
+
+    $scope.getValues = function(category) {
+        var values = [];
+        if ($scope.profile.profile != null) {
+            angular.forEach($scope.profile.profile, function(p) {
+                if(p.type == category)
+                    values.push(p);          
+            });
+        }
+        return values;
+    }
 });

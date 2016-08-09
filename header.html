@@ -3,9 +3,10 @@
         <div class="nav-wrapper blue">
             <a href="#" class="brand-logo left">eNvest</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a ng-click="loginClick()" ng-hide="user.loggedIn">Login</a></li>
-                <li><a ng-click="logoutClick()" ng-hide="user.loggedOut">Logout</a></li>
-                <li><a ng-click="signUpClick()" class="btn">Sign Up</a></li>
+                <li><a ng-click="loginClick()" ng-hide="user.hideLoggedInLink">Login</a></li>
+                <li><a ng-click="logoutClick()" ng-hide="user.hideLoggedOutLink">Logout</a></li>
+                <li><a ng-click="signUpClick()" ng-hide="user.hideLoggedInLink" class="btn">Sign Up</a></li>
+                <li><a ng-click="deleteAccountClick()" class="btn-floating btn-large waves-effect waves-light red" ng-hide="user.hideLoggedOutLink"><i class="material-icons">delete</i></a></li>
             </ul>
         </div>
     </nav>

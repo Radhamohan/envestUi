@@ -43,6 +43,25 @@ linkBankApp.config(function($stateProvider, $urlRouterProvider) {
         }
     })
 
+    .state('device', {
+        url: '/device',
+        views: {
+            '': {
+                templateUrl: './bankLayout.html'
+            },
+            'header@device': {
+                templateUrl: '../header.html',
+                controller: 'headerController'
+            },
+            'footer@device': {
+                templateUrl: '../footer.html'
+            },
+            'middle@device': {
+                templateUrl: './partial/device.html'
+            }
+        }
+    })
+
     .state('load', {
         url: '/load',
         views: {
@@ -63,17 +82,12 @@ linkBankApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-linkBankApp.controller('headerController', function($rootScope, $scope, $http) {
-    $scope.headerClick = function() {
-        parent.location = '../';
-    };
-});
-
+intializeHeaderController(linkBankApp);
 
 linkBankApp.controller('linkBankController', function($rootScope, $scope, $http, $state) {
     $scope.user = {};
     $scope.bankLogin = {};
-    $scope.bankLogin.error = true;
+    $scope.bankLogin.hideErrorMessage = true;
 
     $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
@@ -86,7 +100,13 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
         $state.go('bankCredential');
     };
 
+
     $scope.linkAccount = function() {
+        if ($scope.bankLogin.name == null || $scope.bankLogin.name == undefined) {
+            $state.go('selectBank');
+            return;
+        }
+
         $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/linkAccount?" +
                 "userKey=" + $scope.user.userKey +
                 "&userID=" + $scope.bankLogin.userName +
@@ -94,7 +114,27 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                 "&bank=" + $scope.bankLogin.name)
             .success(function(data, status) {
                 if (data.status == "failure" || data.status == "Failure")
-                    $scope.bankLogin.error = false;                    
+                    $scope.bankLogin.hideErrorMessage = false;
+                if (data.type == 'device')
+                    $state.go('device');
+                else {
+                    parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
+                }
+            });
+    };
+
+    $scope.submitMfa = function() {
+        if ($scope.bankLogin.name == null || $scope.bankLogin.name == undefined) {
+            $state.go('selectBank');
+            return;
+        }
+        $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/submitMFA?" +
+                "userKey=" + $scope.user.userKey +
+                "&mfa=" + $scope.bankLogin.code +
+                "&bank=" + $scope.bankLogin.name)
+            .success(function(data, status) {
+                if (data.status == "failure" || data.status == "Failure")
+                    $scope.bankLogin.hideErrorMessage = false;
                 else {
                     parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
                 }

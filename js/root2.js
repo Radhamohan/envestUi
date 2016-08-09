@@ -6,8 +6,8 @@ rootApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/existingUser');
 
     $stateProvider
-
-        .state('existingUser', {
+    
+    .state('existingUser', {
         url: '/existingUser',
         views: {
             '': {
@@ -19,10 +19,7 @@ rootApp.config(function($stateProvider, $urlRouterProvider) {
             },
             'footer@existingUser': {
                 templateUrl: './footer2.html'
-            },
-            //'left-middle@existingUser': {
-            //  templateUrl: './login2/partial/left-middle.html'
-            //},
+            },            
             'right-middle@existingUser': {
                 templateUrl: './login2/partial/right-middle-existing-user.html'
             },
@@ -86,10 +83,7 @@ rootApp.config(function($stateProvider, $urlRouterProvider) {
             },
             'footer@newUser': {
                 templateUrl: './footer2.html'
-            },
-            //'left-middle@newUser': {
-            //  templateUrl: './login2/partial/left-middle.html'
-            //},
+            },           
             'right-middle@newUser': {
                 templateUrl: './login2/partial/right-middle-new-user.html',
             }
@@ -99,12 +93,11 @@ rootApp.config(function($stateProvider, $urlRouterProvider) {
 
 intializeHeaderController(rootApp);
 
-rootApp.controller('loginController', function($rootScope, $scope, $http, $state) {
-    //alert(1);
+rootApp.controller('loginController', function($rootScope, $scope, $http, $state) {    
     $scope.user = {};
-    $scope.user.error = true;
+    $scope.user.hideErrorMessage = true;
     $scope.existingUser = {};
-    $scope.existingUser.error = true;
+    $scope.existingUser.hideErrorMessage = true;
 
     $scope.active = {
         one: false,
@@ -124,14 +117,14 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                     parent.location = './linkBank/bank.html' + qs;
                 } else {
                     $state.go("newUser");
-                    $scope.user.error = false;
+                    $scope.user.hideErrorMessage = false;
                 }
             });
     };
 
     $scope.tab2 = function() {
         $("#tab2").attr("active", "true");
-    }
+    };
 
     $scope.signIn = function() {
         $state.go("load");
@@ -144,19 +137,19 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                     $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getDashBoard?" +
                             "userKey=" + data.userKey)
                         .success(function(data, status) {
-                            $scope.existingUser.errorFlag = true;
+                            $scope.existingUser.hideErrorMessage = true;
                             if (data.accounts.length == 0) {
                                 parent.location = './linkBank/bank.html' + qs;
                             } else if (data.accounts.length > 0) {
                                 parent.location = './dashboard2/dashboard.html' + qs;
                             } else {
                                 $state.go("existingUser");
-                                $scope.existingUser.error = false;
+                                $scope.existingUser.hideErrorMessage = false;
                             }
                         });
                 } else {
                     $state.go("existingUser");
-                    $scope.existingUser.error = false;
+                    $scope.existingUser.hideErrorMessage = false;
                 }
             });
     };

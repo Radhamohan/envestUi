@@ -31,7 +31,7 @@
                         <label for="amount" class="active right"><b>VALUE AFTER 1 YEAR</b></label>
                     </div>
                     <div class="col s12 right">
-                        <h4 class="grey-text right">{{getValueAfterPeriod(1)}}</h4>
+                        <h4 class="grey-text right">{{getValueAfterPeriod(1, true)}}</h4>
                     </div>                    
                 </div>                
             </div>            
@@ -44,7 +44,7 @@
                         <label for="amount" class="active right"><b>VALUE AFTER 5 YEAR</b></label>
                     </div>
                     <div class="col s12 right">
-                        <h4 class="grey-text right">{{getValueAfterPeriod(5)}}</h4>
+                        <h4 class="grey-text right">{{getValueAfterPeriod(5, true)}}</h4>
                     </div>
                     
                 </div>   
@@ -53,7 +53,7 @@
         
          <div class="row">
             <div class="col s4 offset-s8" >
-                <a href="" class="btn">Apply</a>
+                <a href="" class="btn" ng-click="openSavingsAccount()">Apply</a>
             </div>            
         </div>
     </div>

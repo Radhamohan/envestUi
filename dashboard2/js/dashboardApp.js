@@ -1,6 +1,8 @@
-var dashboardApp = angular.module('dashboardApp', ['ngAnimate', 'ui.router']);
+var dashboardApp = angular.module('dashboardApp', ['ngAnimate', 'ui.router', 'ngCookies']);
+
 var regionUrl;
 var bankData;
+
 dashboardApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/accounts');
 
@@ -83,7 +85,6 @@ dashboardApp.config(function($stateProvider, $urlRouterProvider) {
 intializeHeaderController(dashboardApp);
 
 
-
 // To be removed
 var getRandomSpan = function() {
     return Math.floor((Math.random() * 4) + 1);
@@ -101,12 +102,14 @@ function getAccounts(data) {
 }
 // To be removed
 
-dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state) {
-    $scope.user = {};        
+dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state, $cookies) {
+    setCookie($cookies, 'test', '123');
+
+    $scope.user = {};
     $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
     $state.go("load");
-    
+
     $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
             "userKey=" + $scope.user.userKey)
         .success(function(data, status) {
@@ -194,22 +197,28 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
         });
 
 
-    $scope.getMipMaturity = function() {
+    $scope.getMipMaturity = function(format) {
         var effectiveRate = $scope.mip.interestRate / 100 / 12;
         var num = $scope.mip.monthlyCashFlow * ((Math.pow(1 + effectiveRate, $scope.mip.noOfYears * 12) - 1) / effectiveRate);
-        return $scope.formatNumber(num)
+        if (format)
+            return $scope.formatNumber(num);
+        else return num;
     };
 
-    $scope.getCDMaturity = function() {
+    $scope.getCDMaturity = function(format) {
         var effectiveRate = $scope.cd.interestRate / 100;
         var num = $scope.cd.principle * (Math.pow(1 + effectiveRate, $scope.cd.maturityYears));
-        return $scope.formatNumber(num)
+        if (format)
+            return $scope.formatNumber(num);
+        else return num;
     };
 
-    $scope.getValueAfterPeriod = function(year) {
+    $scope.getValueAfterPeriod = function(year, format) {
         var effectiveRate = $scope.hya.interestRate / 100;
         var num = $scope.hya.principle * (Math.pow(1 + effectiveRate, year));
-        return $scope.formatNumber(num)
+        if (format)
+            return $scope.formatNumber(num);
+        else return num;
     };
 
 
@@ -406,4 +415,45 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     $scope.showUserProfile = function() {
         parent.location = '../profile/profile.html?userKey=' + $scope.user.userKey;
     };
+
+
+    $scope.opnCDAccount = function() {
+        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/saveUserProduct?" +
+                "userKey=" + $scope.user.userKey +
+                "&productId=" + $scope.cd.productId +
+                "&interestRate=" + $scope.cd.interestRate +
+                "&principle=" + $scope.cd.principle +
+                "&valueAtMaturity=" + $scope.getCDMaturity(false))
+            .success(function(data, status) {
+                alert('Certificate Of Deposit Account Opened');
+            });
+    }
+
+    $scope.openMonthlyInvestmentPlan = function() {
+        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/saveUserProduct?" +
+                "userKey=" + $scope.user.userKey +
+                "&productId=" + $scope.mip.productId +
+                "&interestRate=" + $scope.mip.interestRate +
+                "&principle=" + $scope.mip.monthlyCashFlow +
+                "&valueAtMaturity=" + $scope.getMipMaturity())
+            .success(function(data, status) {
+                alert('Monthly Investment Plan Account Opened');
+            });
+    }
+
+    $scope.openSavingsAccount = function() {
+        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/saveUserProduct?" +
+                "userKey=" + $scope.user.userKey +
+                "&productId=2002" +
+                "&interestRate=1.1" +
+                "&principle=10000" +
+                "&valueAtMaturity=20000")
+            .success(function(data, status) {
+                alert('Savings Account Opened');
+            });
+    }
+
+    $scope.showEnvestAccounts = function() {
+        parent.location = '../userProduct/userProduct.html?userKey=' + $scope.user.userKey;
+    }
 });

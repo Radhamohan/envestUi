@@ -1,0 +1,19 @@
+<div class="container">
+    <a href="" class="btn" ng-click="goToDashboard()">Go To Dashboard</a>
+    <table>
+        <thead>
+            <td>Product</td>
+            <td>Bank Name</td>
+            <td>Interest Rate (APY)</td>
+            <td>Maturity Years</td>
+            <td>Value at Maturity</td>
+        </thead>
+        <tr ng-repeat="product in products">
+            <td>{{product.productType}}</td>
+            <td>{{product.bankName}}</td>
+            <td>{{product.interestRate + ' %'}}</td>
+            <td>{{product.maturityYears}}  '  (Bug! Incorrect Values)'</td>
+            <td>{{formatNumber(product.valueAtMaturity)}}</td>
+        </tr>
+    </table>
+</div>
