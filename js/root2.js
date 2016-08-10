@@ -1,4 +1,4 @@
-var rootApp = angular.module('rootApp', ['ngAnimate', 'ui.bootstrap', 'ui.router']);
+var rootApp = angular.module('rootApp', ['ngAnimate', 'ui.bootstrap', 'ui.router', 'ngCookies']);
 var regionUrl = '';
 var activeIndex = '0';
 
@@ -93,7 +93,7 @@ rootApp.config(function($stateProvider, $urlRouterProvider) {
 
 intializeHeaderController(rootApp);
 
-rootApp.controller('loginController', function($rootScope, $scope, $http, $state) {    
+rootApp.controller('loginController', function($rootScope, $scope, $http, $state, $cookies) {    
     $scope.user = {};
     $scope.user.hideErrorMessage = true;
     $scope.existingUser = {};
@@ -114,6 +114,7 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
             .success(function(data, status) {
                 if (data.status == "Success") {
                     var qs = "?userKey=" + data.userKey;
+                    setCookie($cookies, 'token', data.authToken)
                     parent.location = './linkBank/bank.html' + qs;
                 } else {
                     $state.go("newUser");
@@ -128,24 +129,27 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
 
     $scope.signIn = function() {
         $state.go("load");
-        $http.get("https://envestment.herokuapp.com/eNvest/UserService/users/authenticate?" +
+        $http.get(getBaseWebserviceUrl() + "/UserService/users/authenticate?" +
                 "userID=" + $scope.existingUser.userName +
                 "&password=" + $scope.existingUser.password)
-            .success(function(data, status) {
-                if (data.status == "Success") {
-                    var qs = "?userKey=" + data.userKey;
-                    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getDashBoard?" +
-                            "userKey=" + data.userKey)
-                        .success(function(data, status) {
+            .success(function(data1, status) {
+                if (data1.status == "Success") {
+                    var qs = "?userKey=" + data1.userKey;
+                    setCookie($cookies, 'token', data1.authToken);
+                    $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/getDashBoard?" +
+                            "userKey=" + data1.userKey, getHeader($cookies))
+                        .then(function(response, status) {
                             $scope.existingUser.hideErrorMessage = true;
-                            if (data.accounts.length == 0) {
+                            if (response.data.accounts.length == 0) {
                                 parent.location = './linkBank/bank.html' + qs;
-                            } else if (data.accounts.length > 0) {
+                            } else if (response.data.accounts.length > 0) {
                                 parent.location = './dashboard2/dashboard.html' + qs;
                             } else {
                                 $state.go("existingUser");
                                 $scope.existingUser.hideErrorMessage = false;
                             }
+                        }, function(response) {
+                            alert(response);
                         });
                 } else {
                     $state.go("existingUser");

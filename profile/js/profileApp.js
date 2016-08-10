@@ -48,21 +48,24 @@ profileApp.config(function($stateProvider, $urlRouterProvider) {
 intializeHeaderController(profileApp);
 
 profileApp.controller('profileController', function($rootScope, $scope, $http, $state, $cookies) {
-    alert(getCookie($cookies, 'test'));
     $scope.profile = {};
     $scope.profile.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
-    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getUserProfile?" +
-            "userKey=" + $scope.profile.userKey)
-        .success(function(data, status) {
-            $scope.profile = data;
+    $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/getUserProfile?" +
+            "userKey=" + $scope.profile.userKey, getHeader($cookies))
+        .then(function(data, status) {
+            $scope.profile = data.data;
+        }, function(response) {
+            alert("User Session Expired!");
+            goToStartPage(true);
         });
-        
-    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/accounts?" + 
-            "userKey=" + $scope.profileuserKey)
-            .success(function(data, status) {
-                
-            });
+
+    $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/accounts?" +
+            "userKey=" + $scope.profile.userKey, getHeader($cookies))
+        .then(function(data, status) {}, function(response) {
+            alert("User Session Expired!");
+            goToStartPage(true);
+        });
 
     $scope.formatNumber = function(num1) {
         num1 = num1 * -1;
@@ -73,8 +76,8 @@ profileApp.controller('profileController', function($rootScope, $scope, $http, $
         var values = [];
         if ($scope.profile.profile != null) {
             angular.forEach($scope.profile.profile, function(p) {
-                if(p.type == category)
-                    values.push(p);          
+                if (p.type == category)
+                    values.push(p);
             });
         }
         return values;

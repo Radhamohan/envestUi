@@ -29,13 +29,43 @@ getUserKeyOrRedirect = function(href, key) {
 
 setCookie = function(storage, key, value) {
     var expiryTime = new Date();
-    expiryTime.setTime(expiryTime.getTime() + 20 * 1000);    
-    storage.put(key, value, {'expires': expiryTime, 'path': '/'});
+    expiryTime.setTime(expiryTime.getTime() + 5 * 60 * 1000);
+    storage.put(key, value, {
+        'expires': expiryTime,
+        'path': '/'
+    });
 };
 
 getCookie = function(storage, key) {
     return storage.get(key);
 };
+
+getHeader = function(storage) {
+    return {
+        headers: {
+            'X-Auth-Token': getCookie(storage, 'token')
+        }
+    };
+};
+
+handleError = function() {
+    alert('User session expired!');
+    goToStartPage(true);
+};
+
+goToStartPage = function(login) {
+    var prefix = '.';
+    var state = login ? '#existingUser' : '#newUser';
+
+    if (isRoot())
+        parent.location = './' + state;
+    else
+        parent.location = prefix + './' + state;
+};
+
+getBaseWebserviceUrl = function() {
+    return "https://envestment.herokuapp.com/eNvest";
+}
 
 intializeHeaderController = function(app) {
     app.controller('headerController', function($rootScope, $scope, $http) {
@@ -57,25 +87,19 @@ intializeHeaderController = function(app) {
         }
 
         $scope.loginClick = function() {
-            if (isRoot())
-                parent.location = './#existingUser';
-            else
-                parent.location = '../#existingUser';
+            goToStartPage(true);
         };
 
         $scope.signUpClick = function() {
-            if (isRoot())
-                parent.location = './#newUser';
-            else
-                parent.location = '../#newUser';
+            goToStartPage(false);
         };
-        
+
         $scope.deleteAccountClick = function() {
-            alert('Delete Account Feature is not Live Yet');  
+            alert('Delete Account Feature is not Live Yet');
         };
 
         $scope.logoutClick = function() {
-            $scope.loginClick();
+            goToStartPage(true);
         };
     });
 }

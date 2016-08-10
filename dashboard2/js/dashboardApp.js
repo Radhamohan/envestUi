@@ -102,15 +102,14 @@ function getAccounts(data) {
 }
 // To be removed
 
-dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state, $cookies) {
-    setCookie($cookies, 'test', '123');
+dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state, $cookies) {   
 
     $scope.user = {};
     $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
     $state.go("load");
 
-    $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
+    $http.get(getBaseWebserviceUrl() + "/ProductService/getRecommendedProducts?" +
             "userKey=" + $scope.user.userKey)
         .success(function(data, status) {
             for (i = 0; i < data.length; i++) {
@@ -135,34 +134,16 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             $state.go("accounts");
         });
 
-    $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getRecommendedProducts?" +
-            "userKey=" + $scope.user.userKey)
-        .success(function(data, status) {
-            for (i = 0; i < data.length; i++) {
-                if (data[i].productType == "CertificateOfDeposit") {
-                    regionUrl = './partial/cd.html';
-                    $scope.cd = data[i];
-                }
-                if (data[i].productType == "HighYieldAccount") {
-                    regionUrl = './partial/hya.html';
-                }
-                if (data[i].productType == "MonthlyInvestmentPlan") {
-                    regionUrl = './partial/mip.html';
-                    $scope.mip = data[i];
-                }
-            }
-            $state.go("accounts");
-        });
 
-    $http.get("https://envestment.herokuapp.com/eNvest/UserAccountService/users/getDashBoard?" +
-            "userKey=" + $scope.user.userKey)
-        .success(function(data, status) {
-            $scope.accounts = data.accounts;
+    $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/getDashBoard?" +
+            "userKey=" + $scope.user.userKey, getHeader($cookies))
+        .then(function(response, status) {
+            $scope.accounts = response.data.accounts;
             bankData = {};
             bankData['summary'] = {};
 
             var arr = [];
-            var bankBalances = data.dashBoardSummary.bankBalances;
+            var bankBalances = response.data.dashBoardSummary.bankBalances;
 
             for (i = 0; i < bankBalances.length; i++) {
                 arr.push({
@@ -194,6 +175,8 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             };
 
             drawPieChart(bankData['summary'], 'bankSummary');
+        }, function(response) {
+            handleError();
         });
 
 
@@ -418,7 +401,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
 
 
     $scope.opnCDAccount = function() {
-        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/saveUserProduct?" +
+        $http.get(getBaseWebserviceUrl() + "/ProductService/saveUserProduct?" +
                 "userKey=" + $scope.user.userKey +
                 "&productId=" + $scope.cd.productId +
                 "&interestRate=" + $scope.cd.interestRate +
@@ -430,7 +413,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     }
 
     $scope.openMonthlyInvestmentPlan = function() {
-        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/saveUserProduct?" +
+        $http.get(getBaseWebserviceUrl() + "/ProductService/saveUserProduct?" +
                 "userKey=" + $scope.user.userKey +
                 "&productId=" + $scope.mip.productId +
                 "&interestRate=" + $scope.mip.interestRate +
@@ -442,7 +425,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     }
 
     $scope.openSavingsAccount = function() {
-        $http.get("https://envestment.herokuapp.com/eNvest/ProductService/saveUserProduct?" +
+        $http.get(getBaseWebserviceUrl() + "/ProductService/saveUserProduct?" +
                 "userKey=" + $scope.user.userKey +
                 "&productId=2002" +
                 "&interestRate=1.1" +

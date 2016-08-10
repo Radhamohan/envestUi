@@ -1,4 +1,4 @@
-var linkBankApp = angular.module('linkBankApp', ['ngAnimate', 'ui.router']);
+var linkBankApp = angular.module('linkBankApp', ['ngAnimate', 'ui.router', 'ngCookies']);
 
 linkBankApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/selectBank');
@@ -84,7 +84,7 @@ linkBankApp.config(function($stateProvider, $urlRouterProvider) {
 
 intializeHeaderController(linkBankApp);
 
-linkBankApp.controller('linkBankController', function($rootScope, $scope, $http, $state) {
+linkBankApp.controller('linkBankController', function($rootScope, $scope, $http, $state, $cookies) {
     $scope.user = {};
     $scope.bankLogin = {};
     $scope.bankLogin.hideErrorMessage = true;
@@ -107,12 +107,12 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
             return;
         }
 
-        $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/linkAccount?" +
+        $http.post(getBaseWebserviceUrl() + "/UserService/users/linkAccount?" +
                 "userKey=" + $scope.user.userKey +
                 "&userID=" + $scope.bankLogin.userName +
                 "&password=" + $scope.bankLogin.password +
-                "&bank=" + $scope.bankLogin.name)
-            .success(function(data, status) {
+                "&bank=" + $scope.bankLogin.name, getHeader($cookies))
+            .then(function(data, status) {
                 if (data.status == "failure" || data.status == "Failure")
                     $scope.bankLogin.hideErrorMessage = false;
                 if (data.type == 'device')
@@ -120,6 +120,8 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                 else {
                     parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
                 }
+            }, function(response) {
+                alert(response);
             });
     };
 
@@ -128,16 +130,19 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
             $state.go('selectBank');
             return;
         }
-        $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/submitMFA?" +
+
+        $http.post(getBaseWebserviceUrl() + "/UserService/users/submitMFA?" +
                 "userKey=" + $scope.user.userKey +
                 "&mfa=" + $scope.bankLogin.code +
-                "&bank=" + $scope.bankLogin.name)
-            .success(function(data, status) {
+                "&bank=" + $scope.bankLogin.name, getHeader($cookies))
+            .then(function(data, status) {
                 if (data.status == "failure" || data.status == "Failure")
                     $scope.bankLogin.hideErrorMessage = false;
                 else {
                     parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
                 }
+            }, function(response) {
+                alert(response);
             });
     };
 });

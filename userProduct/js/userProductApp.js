@@ -1,4 +1,4 @@
-var userProductApp = angular.module('userProductApp', ['ngAnimate', 'ui.router']);
+var userProductApp = angular.module('userProductApp', ['ngAnimate', 'ui.router', 'ngCookies']);
 
 userProductApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/userProduct');
@@ -47,14 +47,17 @@ userProductApp.config(function($stateProvider, $urlRouterProvider) {
 
 intializeHeaderController(userProductApp);
 
-userProductApp.controller('userProductController', function($rootScope, $scope, $http, $state) {
+userProductApp.controller('userProductController', function($rootScope, $scope, $http, $state, $cookies) {
     $scope.user = {};
     $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
-    $http.get("https://envestment.herokuapp.com/eNvest/ProductService/getAvailableUserProducts?" +
-            "userKey=" + $scope.user.userKey)
-        .success(function(data, status) {
-            $scope.products = data;
+    $http.get(getBaseWebserviceUrl() + "/ProductService/getAvailableUserProducts?" +
+            "userKey=" + $scope.user.userKey, getHeader($cookies))
+        .then(function(data, status) {
+            $scope.products = data.data;
+        }, function(response) {
+            alert(response);
+            goToStartPage(true);
         });
         
     $scope.goToDashboard = function() {
