@@ -16,7 +16,7 @@ getQueryStringKeyValue = function(href, key) {
         }
     }
 };
-
+var isSessionExpired = false;
 getUserKeyOrRedirect = function(href, key) {
     userKey = getQueryStringKeyValue(href, key);
     if (!userKey) {
@@ -40,17 +40,30 @@ getCookie = function(storage, key) {
     return storage.get(key);
 };
 
+removeCookie = function(storage, key) {
+    var expiryTime = new Date();
+    expiryTime.setTime(expiryTime.getTime() - 5 * 60 * 1000);
+    storage.put(key, getCookie(storage, 'token'), {
+        'expires': expiryTime,
+        'path': '/'
+    });
+};
+
 getHeader = function(storage) {
     return {
         headers: {
+            'Content-Type': 'application/json',
             'X-Auth-Token': getCookie(storage, 'token')
         }
     };
 };
 
 handleError = function() {
-    alert('User session expired!');
-    goToStartPage(true);
+    if (!isSessionExpired) {
+        isSessionExpired = true;
+        alert('User session expired!');
+        goToStartPage(true);
+    }
 };
 
 goToStartPage = function(login) {
@@ -68,7 +81,7 @@ getBaseWebserviceUrl = function() {
 }
 
 intializeHeaderController = function(app) {
-    app.controller('headerController', function($rootScope, $scope, $http) {
+    app.controller('headerController', function($rootScope, $scope, $http, $cookies) {
 
         $scope.user = {};
 
@@ -99,6 +112,8 @@ intializeHeaderController = function(app) {
         };
 
         $scope.logoutClick = function() {
+            $cookies.remove('token');
+            removeCookie($cookies, 'token');
             goToStartPage(true);
         };
     });

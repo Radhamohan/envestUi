@@ -111,7 +111,7 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                 "userKey=" + $scope.user.userKey +
                 "&userID=" + $scope.bankLogin.userName +
                 "&password=" + $scope.bankLogin.password +
-                "&bank=" + $scope.bankLogin.name, getHeader($cookies))
+                "&bank=" + $scope.bankLogin.name, null, getHeader($cookies))
             .then(function(data, status) {
                 if (data.status == "failure" || data.status == "Failure")
                     $scope.bankLogin.hideErrorMessage = false;
@@ -134,7 +134,7 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
         $http.post(getBaseWebserviceUrl() + "/UserService/users/submitMFA?" +
                 "userKey=" + $scope.user.userKey +
                 "&mfa=" + $scope.bankLogin.code +
-                "&bank=" + $scope.bankLogin.name, getHeader($cookies))
+                "&bank=" + $scope.bankLogin.name, null, getHeader($cookies))
             .then(function(data, status) {
                 if (data.status == "failure" || data.status == "Failure")
                     $scope.bankLogin.hideErrorMessage = false;
@@ -142,7 +142,7 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                     parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
                 }
             }, function(response) {
-                alert(response);
+                handleError();
             });
     };
 });

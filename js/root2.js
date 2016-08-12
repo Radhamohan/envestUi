@@ -106,7 +106,7 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
 
     $scope.registerUser = function() {
         $state.go("load");
-        $http.post("https://envestment.herokuapp.com/eNvest/UserService/users/registerUser?" +
+        $http.post(getBaseWebserviceUrl() + "/UserService/users/registerUser?" +
                 "userID=" + $scope.user.email +
                 "&password=" + $scope.user.password +
                 "&firstName=" + $scope.user.firstName +

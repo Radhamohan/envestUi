@@ -56,15 +56,13 @@ profileApp.controller('profileController', function($rootScope, $scope, $http, $
         .then(function(data, status) {
             $scope.profile = data.data;
         }, function(response) {
-            alert("User Session Expired!");
-            goToStartPage(true);
+            handleError();
         });
 
     $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/accounts?" +
             "userKey=" + $scope.profile.userKey, getHeader($cookies))
         .then(function(data, status) {}, function(response) {
-            alert("User Session Expired!");
-            goToStartPage(true);
+            handleError();
         });
 
     $scope.formatNumber = function(num1) {

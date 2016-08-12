@@ -107,31 +107,30 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     $scope.user = {};
     $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
-    $state.go("load");
+    $state.go("load");   
+    
 
     $http.get(getBaseWebserviceUrl() + "/ProductService/getRecommendedProducts?" +
-            "userKey=" + $scope.user.userKey)
-        .success(function(data, status) {
+            "userKey=" + $scope.user.userKey, getHeader($cookies))
+        .then(function(response, status) {
+            var data = response.data;
             for (i = 0; i < data.length; i++) {
                 if (data[i].productType == "CertificateOfDeposit") {
                     regionUrl = './partial/cd.html';
-                    $scope.cd = data[i];
-                    $scope.cd.interestRate = 1.7;
-                    $scope.cd.maturityYears = 3;
+                    $scope.cd = data[i];                    
                 }
                 if (data[i].productType == "HighYieldAccount") {
                     regionUrl = './partial/hya.html';
-                    $scope.hya = data[i];
-                    $scope.hya.interestRate = 1.1;
+                    $scope.hya = data[i];                    
                 }
                 if (data[i].productType == "MonthlyInvestmentPlan") {
                     regionUrl = './partial/mip.html';
-                    $scope.mip = data[i];
-                    $scope.mip.interestRate = 1.2;
-                    $scope.mip.noOfYears = 3;
+                    $scope.mip = data[i];                    
                 }
             }
             $state.go("accounts");
+        }, function(response) {
+            handleError();
         });
 
 
@@ -175,12 +174,14 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             };
 
             drawPieChart(bankData['summary'], 'bankSummary');
-        }, function(response) {
-            handleError();
+        }, function(response) {            
+              handleError();
         });
 
 
     $scope.getMipMaturity = function(format) {
+        if($scope.mip == null ) return;
+        
         var effectiveRate = $scope.mip.interestRate / 100 / 12;
         var num = $scope.mip.monthlyCashFlow * ((Math.pow(1 + effectiveRate, $scope.mip.noOfYears * 12) - 1) / effectiveRate);
         if (format)
@@ -189,6 +190,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     };
 
     $scope.getCDMaturity = function(format) {
+        if($scope.cd == null ) return;
         var effectiveRate = $scope.cd.interestRate / 100;
         var num = $scope.cd.principle * (Math.pow(1 + effectiveRate, $scope.cd.maturityYears));
         if (format)
@@ -197,6 +199,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     };
 
     $scope.getValueAfterPeriod = function(year, format) {
+        if($scope.hya == null ) return;
         var effectiveRate = $scope.hya.interestRate / 100;
         var num = $scope.hya.principle * (Math.pow(1 + effectiveRate, year));
         if (format)
@@ -336,6 +339,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     $scope.formatNonCurrencyNumber = function(num1) {
         return numeral(num1).format('(0,0.00)');
     };
+    
     $scope.getAmountAvailabeForTransfer = function(isFormatted) {
         var num = 0;
         angular.forEach($scope.accounts, function(account) {
@@ -406,9 +410,11 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
                 "&productId=" + $scope.cd.productId +
                 "&interestRate=" + $scope.cd.interestRate +
                 "&principle=" + $scope.cd.principle +
-                "&valueAtMaturity=" + $scope.getCDMaturity(false))
-            .success(function(data, status) {
+                "&valueAtMaturity=" + $scope.getCDMaturity(false), getHeader($cookies))
+            .then(function(data, status) {
                 alert('Certificate Of Deposit Account Opened');
+            }, function(response) {
+                handleError();
             });
     }
 
@@ -418,9 +424,11 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
                 "&productId=" + $scope.mip.productId +
                 "&interestRate=" + $scope.mip.interestRate +
                 "&principle=" + $scope.mip.monthlyCashFlow +
-                "&valueAtMaturity=" + $scope.getMipMaturity())
-            .success(function(data, status) {
+                "&valueAtMaturity=" + $scope.getMipMaturity(), getHeader($cookies))
+            .then(function(data, status) {
                 alert('Monthly Investment Plan Account Opened');
+            }, function(response) {
+                handleError();
             });
     }
 
@@ -430,9 +438,11 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
                 "&productId=2002" +
                 "&interestRate=1.1" +
                 "&principle=10000" +
-                "&valueAtMaturity=20000")
-            .success(function(data, status) {
+                "&valueAtMaturity=20000", getHeader($cookies))
+            .then(function(data, status) {
                 alert('Savings Account Opened');
+            }, function(response) {
+                handleError();
             });
     }
 

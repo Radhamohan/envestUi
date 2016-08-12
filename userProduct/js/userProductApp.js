@@ -56,8 +56,7 @@ userProductApp.controller('userProductController', function($rootScope, $scope, 
         .then(function(data, status) {
             $scope.products = data.data;
         }, function(response) {
-            alert(response);
-            goToStartPage(true);
+            handleError();
         });
         
     $scope.goToDashboard = function() {
