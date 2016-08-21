@@ -112,9 +112,13 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                 "&userID=" + $scope.bankLogin.userName +
                 "&password=" + $scope.bankLogin.password +
                 "&bank=" + $scope.bankLogin.name, null, getHeader($cookies))
-            .then(function(data, status) {
-                if (data.status == "failure" || data.status == "Failure")
+            .then(function(response, status) {
+                var data = response.data;
+                if (data.status == "failure" || data.status == "Failure"){
+                    $scope.bankLogin.serverError = data.message;
                     $scope.bankLogin.hideErrorMessage = false;
+                    return;
+                }
                 if (data.type == 'device')
                     $state.go('device');
                 else {

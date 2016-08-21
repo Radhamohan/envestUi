@@ -1,7 +1,7 @@
 <div>
     <nav>
         <div class="nav-wrapper blue">
-            <a href="#" class="brand-logo left">eNvest</a>
+            <a href="#" class="brand-logo left">eNvest</a>            
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a ng-click="loginClick()" ng-hide="user.hideLoggedInLink">Login</a></li>
                 <li><a ng-click="logoutClick()" ng-hide="user.hideLoggedOutLink">Logout</a></li>
@@ -10,4 +10,5 @@
             </ul>
         </div>
     </nav>
+    <input type="text" name="" value="" ng-hide="user.hideToken" ng-model="user.cookie">
 </div>

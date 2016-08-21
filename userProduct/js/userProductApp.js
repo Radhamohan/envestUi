@@ -58,12 +58,18 @@ userProductApp.controller('userProductController', function($rootScope, $scope, 
         }, function(response) {
             handleError();
         });
-        
+
     $scope.goToDashboard = function() {
         parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
     };
 
-    $scope.formatNumber = function(num1) {        
+    $scope.formatNumber = function(num1) {
         return numeral(num1).format('($0,0.00)');
+    };
+
+    $scope.getMaturityYears = function(product) {
+        if (product.maturityYears == null)
+            return product.noOfYears;
+        return product.maturityYears;
     };
 });

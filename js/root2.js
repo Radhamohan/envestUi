@@ -145,7 +145,7 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                             } else if (response.data.accounts.length > 0) {
                                 parent.location = './dashboard2/dashboard.html' + qs;
                             } else {
-                                $state.go("existingUser");
+                                $state.go("existingUser");                                
                                 $scope.existingUser.hideErrorMessage = false;
                             }
                         }, function(response) {
@@ -153,6 +153,7 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                         });
                 } else {
                     $state.go("existingUser");
+                    $scope.existingUser.serverError = data1.message;
                     $scope.existingUser.hideErrorMessage = false;
                 }
             });

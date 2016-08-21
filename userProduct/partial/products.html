@@ -12,7 +12,7 @@
             <td>{{product.productType}}</td>
             <td>{{product.bankName}}</td>
             <td>{{product.interestRate + ' %'}}</td>
-            <td>{{product.maturityYears}}</td>
+            <td>{{getMaturityYears(product)}}</td>
             <td>{{formatNumber(product.valueAtMaturity)}}</td>
         </tr>
     </table>

@@ -183,7 +183,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
         if($scope.mip == null ) return;
         
         var effectiveRate = $scope.mip.interestRate / 100 / 12;
-        var num = $scope.mip.monthlyCashFlow * ((Math.pow(1 + effectiveRate, $scope.mip.noOfYears * 12) - 1) / effectiveRate);
+        var num = $scope.mip.monthlyCashFlow * ((Math.pow(1 + effectiveRate, $scope.mip.maturityYears * 12) - 1) / effectiveRate);
         if (format)
             return $scope.formatNumber(num);
         else return num;

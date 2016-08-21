@@ -1,3 +1,5 @@
+var hideToken = true;
+
 getQueryStringKeyValue = function(href, key) {
     var url = decodeURIComponent(href).toLowerCase();
     url = url.substring(1);
@@ -87,8 +89,11 @@ intializeHeaderController = function(app) {
 
         $scope.user.hideLoggedInLink = true;
         $scope.user.hideLoggedOutLink = true;
+        $scope.user.hideToken = hideToken;
 
         userKey = getQueryStringKeyValue(window.location.href, "userKey");
+        
+        $scope.user.cookie = getCookie($cookies, 'token');
 
         if (!userKey) {
             $scope.user.hideLoggedInLink = false;
@@ -108,7 +113,21 @@ intializeHeaderController = function(app) {
         };
 
         $scope.deleteAccountClick = function() {
-            alert('Delete Account Feature is not Live Yet');
+            $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
+            if ($scope.user.userKey == null || $scope.user.userKey == 'undefined')
+                return;
+            var r = confirm('Are you sure you want to delete the account');
+            if (r == true) {
+                $http.post(getBaseWebserviceUrl() + '/UserService/users/deleteUser?' + 
+                'userKey=' + $scope.user.userKey, null, getHeader($cookies))
+                .then(function(data, status) {
+                    alert('Account deleted')
+                }, function(response) {
+                    alert('Account could not be deleted!')
+                });
+            } else {
+                return;
+            }
         };
 
         $scope.logoutClick = function() {
