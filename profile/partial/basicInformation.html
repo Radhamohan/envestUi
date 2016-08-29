@@ -1,4 +1,54 @@
 <div class="divider"></div>
+
+<div class="row">
+    <div class="col s4"></div>
+    <div class="col s4">
+        <div class="section">
+            <h5>User Info</h5>
+            <div class="row">
+                <div class="col s12">
+                    {{userInfo.names[0]}}
+                </div>
+                <div class="col s12">
+                    {{userInfo.emails[0].email}}
+                </div>
+                <div class="col s12">
+                    {{userInfo.phone_numbers[0].number}}
+                </div>
+                <div class="col s12">
+                    {{userInfo.addresses[0].street}}
+                    {{userInfo.addresses[0].city}}
+                    {{userInfo.addresses[0].state}}
+                    {{userInfo.addresses[0].zip}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s4"></div>
+</div>
+
+
+<div class="row">
+    <div class="col s4"></div>
+    <div class="col s4">
+        <div class="section">
+            <h5>Accounts</h5>
+            <div class="row" ng-repeat="a in accounts.accounts">
+                <div class="col s4">
+                    {{a.responseFor}}
+                </div>
+                 <div class="col s4">
+                    {{a.meta.name}}
+                </div>
+                 <div class="col s4">
+                    {{a.meta.number}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s4"></div>
+</div>
+
 <div class="row">
     <div class="col s4"></div>
     <div class="col s4">
@@ -10,10 +60,10 @@
                 </div>
                 <div class="col s6">
                     {{formatNumber(p.amount)}}
-                </div>                
+                </div>
             </div>
         </div>
-        
+
         <div class="section">
             <h5>Bank Fee</h5>
             <div class="row" ng-repeat="p in getValues('Bank Fee')">
@@ -22,10 +72,10 @@
                 </div>
                 <div class="col s6">
                     {{formatNumber(p.amount)}}
-                </div>                
+                </div>
             </div>
         </div>
-        
+
         <div class="section">
             <h5>Utility Bill</h5>
             <div class="row" ng-repeat="p in getValues('Utility Bill')">
@@ -34,10 +84,10 @@
                 </div>
                 <div class="col s6">
                     {{formatNumber(p.amount)}}
-                </div>                
+                </div>
             </div>
         </div>
-        
+
         <div class="section">
             <h5>Salary</h5>
             <div class="row" ng-repeat="p in getValues('Salary')">
@@ -46,11 +96,11 @@
                 </div>
                 <div class="col s6">
                     {{formatNumber(p.amount)}}
-                </div>                
+                </div>
             </div>
         </div>
-        
-         <div class="section">
+
+        <div class="section">
             <h5>Inflow</h5>
             <div class="row" ng-repeat="p in getValues('Inflow')">
                 <div class="col s6">
@@ -58,22 +108,22 @@
                 </div>
                 <div class="col s6">
                     {{formatNumber(p.amount)}}
-                </div>                
+                </div>
             </div>
         </div>
-        
-         <div class="section" ng-repeat="p in getValues('Outflow')">
+
+        <div class="section">
             <h5>Outflow</h5>
-            <div class="row">
+            <div class="row" ng-repeat="p in getValues('Outflow')">
                 <div class="col s6">
                     {{p.subType}}
                 </div>
                 <div class="col s6">
                     {{formatNumber(p.amount)}}
-                </div>                
+                </div>
             </div>
         </div>
-        
+
         <div class="section">
             <h5>Tax</h5>
             <div class="row" ng-repeat="p in getValues('Tax')">
@@ -85,7 +135,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="section">
             <h5>Loan</h5>
             <div class="row" ng-repeat="p in getValues('Load Amount')">
@@ -97,7 +147,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <div class="col s4"></div>
 </div>

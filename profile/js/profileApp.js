@@ -51,9 +51,17 @@ profileApp.controller('profileController', function($rootScope, $scope, $http, $
     $scope.profile = {};
     $scope.profile.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
 
-    $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/getUserProfile?" +
+    $http.get(getBaseWebserviceUrl() + "/UserService/users/getUserInfo?" +
             "userKey=" + $scope.profile.userKey, getHeader($cookies))
         .then(function(data, status) {
+            $scope.userInfo = data.data.info;
+        }, function(response) {
+            handleError();
+        });
+
+    $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/getUserProfile?" +
+            "userKey=" + $scope.profile.userKey, getHeader($cookies))
+        .then(function(data, status) {            
             $scope.profile = data.data;
         }, function(response) {
             handleError();
@@ -61,7 +69,9 @@ profileApp.controller('profileController', function($rootScope, $scope, $http, $
 
     $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/accounts?" +
             "userKey=" + $scope.profile.userKey, getHeader($cookies))
-        .then(function(data, status) {}, function(response) {
+        .then(function(data, status) {
+            $scope.accounts =  data.data;
+        }, function(response) {
             handleError();
         });
 
