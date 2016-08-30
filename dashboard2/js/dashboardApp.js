@@ -448,5 +448,9 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
 
     $scope.showEnvestAccounts = function() {
         parent.location = '../userProduct/userProduct.html?userKey=' + $scope.user.userKey;
-    }
+    };
+    
+    $scope.showTransactions = function() {
+        parent.location = '../transactions/transactions.html?userkey=' + $scope.user.userKey;
+    };
 });

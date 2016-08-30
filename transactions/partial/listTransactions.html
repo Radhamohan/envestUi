@@ -1,0 +1,29 @@
+<style>
+    .scorll-apply {
+        height: 100vh;
+        overflow: scroll;
+    }
+</style>
+<div class="row">
+    <div class="col s4"></div>
+    <div class="col s4">'
+
+        <table class="table">
+            <tbody class="scorll-apply">
+                <tr class="success">
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Transaction Type</th>
+                    <th class="text-center">Amount</th>
+                </tr>
+                <tr class="warning" ng-repeat='transaction in transactions'>
+                    <td>{{transaction.date[2] + '/' + transaction.date[1] + '/' + transaction.date[0]}}</td>
+                    <td>{{transaction.category[0] + '-' + transaction.category[1]}}</td>
+                    <td class="text-right">{{ (transaction.amount).toFixed(2) }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <div class="col s4"></div>
+
+</div>
