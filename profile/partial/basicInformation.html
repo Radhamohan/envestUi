@@ -1,8 +1,8 @@
 <div class="divider"></div>
 
 <div class="row">
-    <div class="col s4"></div>
-    <div class="col s4">
+    <div class="col s2"></div>
+    <div class="col s8">
         <div class="section">
             <h5>User Info</h5>
             <div class="row">
@@ -24,13 +24,13 @@
             </div>
         </div>
     </div>
-    <div class="col s4"></div>
+    <div class="col s2"></div>
 </div>
 
 
 <div class="row">
-    <div class="col s4"></div>
-    <div class="col s4">
+    <div class="col s2"></div>
+    <div class="col s8">
         <div class="section">
             <h5>Accounts</h5>
             <div class="row" ng-repeat="a in accounts.accounts">
@@ -46,20 +46,23 @@
             </div>
         </div>
     </div>
-    <div class="col s4"></div>
+    <div class="col s2"></div>
 </div>
 
 <div class="row">
-    <div class="col s4"></div>
-    <div class="col s4">
+    <div class="col s2"></div>
+    <div class="col s8">
         <div class="section">
             <h5>Interest</h5>
             <div class="row" ng-repeat="p in getValues('Interest')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
                 </div>
             </div>
         </div>
@@ -67,35 +70,114 @@
         <div class="section">
             <h5>Bank Fee</h5>
             <div class="row" ng-repeat="p in getValues('Bank Fee')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
                 </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
+                </div>
+                <div class="col s4">
+                    Overdraft
+                </div>
+                <div class="col s4">
+                    {{formatNumber(p.overDraft)}}
+                </div>
+                <div class="col s4">
+                    -
+                </div>
+                 <div class="col s4">
+                    Insufficient Funds
+                </div>
+                <div class="col s4">
+                    {{formatNumber(p.insufficientFunds)}}
+                </div>
+                <div class="col s4">
+                    -
+                </div>
+                <div class="col s4">
+                    Late Payment
+                </div>
+                <div class="col s4">
+                    {{formatNumber(p.latePayment)}}
+                </div>
+                <div class="col s4">
+                    -
+                </div>
+                 <div class="col s4">
+                    Foreign Transaction
+                </div>
+                <div class="col s4">
+                    {{formatNumber(p.foreignTransaction)}}
+                </div>
+                <div class="col s4">
+                    -
+                </div>
+                
             </div>
         </div>
 
         <div class="section">
-            <h5>Utility Bill</h5>
-            <div class="row" ng-repeat="p in getValues('Utility Bill')">
-                <div class="col s6">
-                    {{p.subType}}
+            <h5>Payments</h5>
+            <div class="row" ng-repeat="p in getValues('Payment')">
+               <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
                 </div>
             </div>
         </div>
+        
+         <div class="section">
+            <h5>Financial</h5>
+            <div class="row" ng-repeat="p in getValues('Financial')">
+               <div class="col s4">
+                    {{p.subType}} 
+                </div>
+                <div class="col s4">
+                    {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
+                </div>
+            </div>
+        </div>       
 
         <div class="section">
             <h5>Salary</h5>
             <div class="row" ng-repeat="p in getValues('Salary')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate   + '  -  '  }}  {{p.endDate}}</b></span>
+                </div>
+                <div class="col s4">
+                    Employer
+                </div>
+                <div class="col s4">
+                    {{p.employer}}
+                </div>
+                <div class="col s4">
+                    -
+                </div>
+                 <div class="col s4">
+                    Last Salary
+                </div>
+                <div class="col s4">
+                    {{formatNumber(p.recentSalary)}}
+                </div>
+                <div class="col s4">
+                    -
                 </div>
             </div>
         </div>
@@ -103,11 +185,14 @@
         <div class="section">
             <h5>Inflow</h5>
             <div class="row" ng-repeat="p in getValues('Inflow')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
                 </div>
             </div>
         </div>
@@ -115,11 +200,14 @@
         <div class="section">
             <h5>Outflow</h5>
             <div class="row" ng-repeat="p in getValues('Outflow')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
                 </div>
             </div>
         </div>
@@ -127,11 +215,14 @@
         <div class="section">
             <h5>Tax</h5>
             <div class="row" ng-repeat="p in getValues('Tax')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
                 </div>
             </div>
         </div>
@@ -139,15 +230,18 @@
         <div class="section">
             <h5>Loan</h5>
             <div class="row" ng-repeat="p in getValues('Load Amount')">
-                <div class="col s6">
-                    {{p.subType}}
+                <div class="col s4">
+                    {{p.subType}} 
                 </div>
-                <div class="col s6">
+                <div class="col s4">
                     {{formatNumber(p.amount)}}
+                </div>
+                <div class="col s4">
+                    <span><b>{{p.startDate}}   -   {{p.endDate}}</b></span>
                 </div>
             </div>
         </div>
 
     </div>
-    <div class="col s4"></div>
+    <div class="col s2"></div>
 </div>
