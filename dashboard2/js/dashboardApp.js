@@ -2,6 +2,26 @@ var dashboardApp = angular.module('dashboardApp', ['ngAnimate', 'ui.router', 'ng
 
 var regionUrl;
 var bankData;
+var userKey = 0;
+var i = 0;
+
+dashboardApp.factory('mytime', function($timeout, $http, $cookies) {
+    var time = {};
+
+    (function tick() {
+        $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/getDashBoard?" +
+            "userKey=" + userKey, getHeader($cookies))
+        .then(function(response, status) {
+           time.now = i++;
+        }, function(response) {
+            handleError();
+        });      
+        
+        
+        $timeout(tick, 1000);
+    })();
+    return time;
+});
 
 dashboardApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/accounts');
@@ -102,13 +122,16 @@ function getAccounts(data) {
 }
 // To be removed
 
-dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state, $cookies) {   
+dashboardApp.controller('dashboardController', function($rootScope, $scope, $http, $state, $cookies, mytime) {
 
     $scope.user = {};
     $scope.user.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
+    userKey = $scope.user.userKey;
 
-    $state.go("load");   
+    $state.go("load");
     
+    $scope.mytime = mytime;
+
 
     $http.get(getBaseWebserviceUrl() + "/ProductService/getRecommendedProducts?" +
             "userKey=" + $scope.user.userKey, getHeader($cookies))
@@ -117,15 +140,15 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             for (i = 0; i < data.length; i++) {
                 if (data[i].productType == "CertificateOfDeposit") {
                     regionUrl = './partial/cd.html';
-                    $scope.cd = data[i];                    
+                    $scope.cd = data[i];
                 }
                 if (data[i].productType == "HighYieldAccount") {
                     regionUrl = './partial/hya.html';
-                    $scope.hya = data[i];                    
+                    $scope.hya = data[i];
                 }
                 if (data[i].productType == "MonthlyInvestmentPlan") {
                     regionUrl = './partial/mip.html';
-                    $scope.mip = data[i];                    
+                    $scope.mip = data[i];
                 }
             }
             $state.go("accounts");
@@ -174,14 +197,14 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
             };
 
             drawPieChart(bankData['summary'], 'bankSummary');
-        }, function(response) {            
-              handleError();
+        }, function(response) {
+            handleError();
         });
 
 
     $scope.getMipMaturity = function(format) {
-        if($scope.mip == null ) return;
-        
+        if ($scope.mip == null) return;
+
         var effectiveRate = $scope.mip.interestRate / 100 / 12;
         var num = $scope.mip.monthlyCashFlow * ((Math.pow(1 + effectiveRate, $scope.mip.maturityYears * 12) - 1) / effectiveRate);
         if (format)
@@ -190,7 +213,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     };
 
     $scope.getCDMaturity = function(format) {
-        if($scope.cd == null ) return;
+        if ($scope.cd == null) return;
         var effectiveRate = $scope.cd.interestRate / 100;
         var num = $scope.cd.principle * (Math.pow(1 + effectiveRate, $scope.cd.maturityYears));
         if (format)
@@ -199,7 +222,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     };
 
     $scope.getValueAfterPeriod = function(year, format) {
-        if($scope.hya == null ) return;
+        if ($scope.hya == null) return;
         var effectiveRate = $scope.hya.interestRate / 100;
         var num = $scope.hya.principle * (Math.pow(1 + effectiveRate, year));
         if (format)
@@ -259,7 +282,8 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     };
 
     $scope.linkAnotherAccount = function() {
-        parent.location = '../linkBank/bank.html?userKey=' + $scope.user.userKey;
+        gotoLinkBank($scope.user.userKey);
+        //parent.location = '../linkBank/bank.html?userKey=' + $scope.user.userKey;
     }
 
 
@@ -339,7 +363,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     $scope.formatNonCurrencyNumber = function(num1) {
         return numeral(num1).format('(0,0.00)');
     };
-    
+
     $scope.getAmountAvailabeForTransfer = function(isFormatted) {
         var num = 0;
         angular.forEach($scope.accounts, function(account) {
@@ -400,7 +424,7 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     };
 
     $scope.showUserProfile = function() {
-        parent.location = '../profile/profile.html?userKey=' + $scope.user.userKey;
+        gotoUserProfile($scope.user.userKey);
     };
 
 
@@ -447,9 +471,10 @@ dashboardApp.controller('dashboardController', function($rootScope, $scope, $htt
     }
 
     $scope.showEnvestAccounts = function() {
-        parent.location = '../userProduct/userProduct.html?userKey=' + $scope.user.userKey;
+        gotoEnvestAccounts($scope.user.userKey);
+        //parent.location = '../userProduct/userProduct.html?userKey=' + $scope.user.userKey;
     };
-    
+
     $scope.showTransactions = function() {
         parent.location = '../transactions/transactions.html?userkey=' + $scope.user.userKey;
     };

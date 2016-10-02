@@ -80,18 +80,12 @@ function getTransactions(data, accountId) {
 transactionsApp.controller('transactionsController', function($rootScope, $scope, $http, $state, $cookies) { 
     $scope.transactions = {};   
     $scope.transactions.userKey = getUserKeyOrRedirect(window.location.href, "userKey");
-    //var queryString = decodeURIComponent(window.location.href);
-    //queryString = queryString.substring(1);
-
-    //var queries = queryString.split("?");
-    //var queries2 = queries[1].split("&");
-    //var accountId = queries2[0].replace("accountId=", "");
-    //var userId = queries2[1].replace("userId=", "");
     
     $http.get(getBaseWebserviceUrl() + "/UserAccountService/users/transactions?" +
         "userKey=" + $scope.transactions.userKey, getHeader($cookies))
         .then(function(data, status) {
-            $scope.transactions = getTransactions(data.data, 0);        
+            $scope.transactions = getTransactions(data.data, 0);
+            document.getElementById("txtArea").innerHTML = JSON.stringify(data.data, undefined, 2);
     }, function(respomse) {handleError();});    
 
     $scope.formatNumber = function(num) {

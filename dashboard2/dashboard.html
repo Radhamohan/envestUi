@@ -16,7 +16,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="../js/helper.js"></script>
-    <script src="./js/dashboardApp.js?v=1.1"></script>
+    <script src="../js/routing.js"></script>
+    <script src="./js/dashboardApp.js?v=1.2"></script>
     <style>
         body {
             //margin: 5px;
@@ -28,6 +29,9 @@
 </head>
 
 <body class="" ng-app="dashboardApp" ng-controller="dashboardController">
+    <div>
+        Current time is: {{ mytime.now }}
+    </div>
     <div ui-view></div>
 </body>
 

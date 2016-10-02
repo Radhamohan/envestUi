@@ -140,9 +140,9 @@ rootApp.controller('loginController', function($rootScope, $scope, $http, $state
                             "userKey=" + data1.userKey, getHeader($cookies))
                         .then(function(response, status) {
                             $scope.existingUser.hideErrorMessage = true;
-                            if (response.data.accounts.length == 0) {
+                            if (response.data.accounts.length == 0) {                                
                                 parent.location = './linkBank/bank.html' + qs;
-                            } else if (response.data.accounts.length > 0) {
+                            } else if (response.data.accounts.length > 0) {                                
                                 parent.location = './dashboard2/dashboard.html' + qs;
                             } else {
                                 $state.go("existingUser");                                

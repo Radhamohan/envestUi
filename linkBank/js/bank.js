@@ -122,7 +122,7 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                 if (data.type == 'device')
                     $state.go('device');
                 else {
-                    parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
+                    gotoDashboard($scope.user.userKey);                    
                 }
             }, function(response) {
                 alert(response);
@@ -143,7 +143,7 @@ linkBankApp.controller('linkBankController', function($rootScope, $scope, $http,
                 if (data.status == "failure" || data.status == "Failure")
                     $scope.bankLogin.hideErrorMessage = false;
                 else {
-                    parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
+                     gotoDashboard($scope.user.userKey);                    
                 }
             }, function(response) {
                 handleError();

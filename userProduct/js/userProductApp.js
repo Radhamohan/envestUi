@@ -60,7 +60,7 @@ userProductApp.controller('userProductController', function($rootScope, $scope, 
         });
 
     $scope.goToDashboard = function() {
-        parent.location = "../dashboard2/dashboard.html?userKey=" + $scope.user.userKey;
+        gotoDashboard($scope.user.userKey);        
     };
 
     $scope.formatNumber = function(num1) {
